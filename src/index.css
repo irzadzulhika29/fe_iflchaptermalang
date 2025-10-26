@@ -1,0 +1,172 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+.inner_body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* colored sweet alert style */
+.colored-toast.swal2-icon-success {
+  background-color: #a5dc86 !important;
+}
+.colored-toast.swal2-icon-error {
+  background-color: #f27474 !important;
+}
+
+/* delete arrow in number input style */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  appearance: textfield;
+}
+
+/* sidebar dashboard style*/
+.sidebar::-webkit-scrollbar {
+  width: 7px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background: #0096c760;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: #0096c7;
+}
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #0077b6;
+}
+
+/* comments modal style*/
+.comments::-webkit-scrollbar {
+  width: 5px;
+}
+.comments::-webkit-scrollbar-track {
+  background: #fff;
+}
+.comments::-webkit-scrollbar-thumb {
+  background: #ccd5d8;
+}
+.comments::-webkit-scrollbar-thumb:hover {
+  background: #bac2c7;
+}
+
+/* modal dashboard page style */
+.customModal {
+  border-radius: 12px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  -ms-border-radius: 12px;
+  -o-border-radius: 12px;
+}
+.customModalUser {
+  border-radius: 8px;
+  padding: 0 !important;
+}
+
+/* react select style */
+.react-select__value-container {
+  padding: 0 !important;
+}
+
+/* ckeditor style */
+.ck-content * {
+  all: revert;
+}
+.dangerous_html * {
+  all: revert;
+}
+.dangerous_html .image {
+  margin: 0 auto;
+  max-width: 600px !important;
+  width: 100%;
+}
+.dangerous_html img {
+  max-width: 600px !important;
+  width: 100%;
+}
+.dangerous_html p {
+  text-align: justify;
+}
+
+@layer components {
+  .navbar {
+    @apply sticky top-0 block w-full py-4 shadow-md z-1000 bg-primary-1 text-light-1;
+  }
+  .navbar_child {
+    @apply relative flex items-center justify-between w-full px-4 md:px-8 lg:px-12;
+  }
+  .navbar_field {
+    @apply absolute top-0 z-10 flex flex-col items-center justify-center w-full h-screen gap-6 transition-all duration-300 ease-in md:gap-4 lg:gap-8 bg-primary-1 md:flex-row md:static md:w-auto md:h-auto;
+  }
+  .social_icon {
+    @apply p-2 duration-300 border-2 rounded-full text-light-1 border-light-1 hover:text-primary-1 hover:bg-light-1;
+  }
+  .social_icon_text {
+    @apply flex items-center gap-1 text-sm sm:text-base sm:gap-2 text-light-1;
+  }
+  .card {
+    @apply flex flex-col justify-between w-full max-w-sm gap-2 p-4 duration-300 border rounded-md shadow-lg text-dark-1 bg-light-1;
+  }
+  .left_arrow_slider {
+    @apply absolute z-1 left-0 top-1/2 -translate-y-1/2 bg-gradient-to-r from-white from-70% to-transparent w-12 h-full flex items-center justify-start;
+  }
+  .right_arrow_slider {
+    @apply absolute z-1 right-0 top-1/2 -translate-y-1/2 bg-gradient-to-l from-white from-70% to-transparent w-12 h-full flex items-center justify-end;
+  }
+  .dropdown_content {
+    @apply absolute flex-col hidden gap-2 p-4 -translate-x-1/2 rounded-md top-8 left-1/2 bg-light-1 text-primary-1 group-hover:flex z-1;
+  }
+  .card_form {
+    @apply w-full max-w-sm p-4 mx-auto border border-gray-200 shadow-lg rounded-3xl text-dark-1 bg-light-1 z-1 sm:p-6 md:p-8;
+  }
+  .input_form {
+    @apply w-full px-8 py-2 text-sm transition-all border-b-2 outline-none border-b-dark-fade focus:border-b-primary-1 text-dark-1;
+  }
+  .button {
+    @apply relative flex items-center justify-center font-semibold transition-all duration-300 shadow-sm cursor-pointer w-max;
+  }
+  .link {
+    @apply relative block text-base font-semibold transition-all duration-300 cursor-pointer lg:text-lg w-max;
+  }
+  .container_profile_section {
+    @apply flex flex-col !max-w-screen-md gap-8 text-dark-1 sm:gap-4 md:gap-12 sm:flex-row h-fit md:min-h-500;
+  }
+  .sidebar-link {
+    @apply relative flex text-base items-center px-4 gap-5 text-light-1 pt-3 pb-2.5 rounded-lg my-2;
+  }
+  .popover {
+    @apply absolute p-4 space-y-2 -translate-x-1/2 border rounded-md shadow-md top-12 left-1/2 w-36 bg-light-1 text-primary-1 z-1;
+  }
+  .events_dropdown {
+    @apply relative flex items-center gap-2 p-2 text-sm font-semibold uppercase cursor-pointer w-52 sm:px-4 sm:gap-8;
+  }
+  .donation_card_history {
+    @apply relative flex flex-col items-center justify-between w-full px-2 py-6 mx-auto overflow-hidden border border-gray-300 sm:gap-2 md:gap-8 sm:w-max md:w-full md:flex-row text-dark-1 rounded-2xl;
+  }
+  .text_area_input_about {
+    @apply block p-2.5 w-full text-sm resize-none leading-relaxed text-dark-1 bg-light-1 rounded-lg border border-gray-300 outline-primary-1;
+  }
+  .popup_comment {
+    @apply fixed w-full max-w-xs py-4 space-y-4 overflow-auto border border-gray-400 rounded-lg top-28 bg-light-1 text-dark-1 z-100;
+  }
+  .circle_number {
+    @apply absolute flex items-center justify-center w-5 h-5 text-xs bg-red-500 rounded-full sm:w-6 sm:h-6 -top-2 -right-2 text-light-1;
+  }
+  .hover_events {
+    @apply absolute hidden px-2 py-1 text-xs font-medium rounded -bottom-8 sm:group-hover:flex bg-light-2;
+  }
+  .text_area_input_description {
+    @apply w-full col-span-2 py-2 my-2 overflow-hidden text-sm border-b-2 outline-none resize-none border-b-dark-fade focus:border-b-primary-1 text-dark-1;
+  }
+  .blog_card_home {
+    @apply flex justify-between overflow-hidden duration-300 rounded shadow-xl bg-light-1 hover:scale-105;
+  }
+}
