@@ -13,6 +13,12 @@ import Icon from "../icon";
 export const ListMenu = [
   { title: "Dashboard", links: [{ name: "IFL Malang", icon: <Gauge size={20} />, path: "/admin/dashboards" }] },
   {
+    title: "DPP",
+    links: [
+      { name: "Event", icon: <ShoppingBag size={20} />, path: "/admin/dashboard/event" },
+    ],
+  },
+  {
     title: "Bismar",
     links: [
       { name: "Product", icon: <ShoppingBag size={20} />, path: "/admin/dashboard/product" },

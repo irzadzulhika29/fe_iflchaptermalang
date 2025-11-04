@@ -31,3 +31,22 @@ export const addDonationForCampaign = async (body) => {
       SweatAlert(error.response.data?.message);
     });
 };
+
+export const addDonationWithQRIS = async (formData) => {
+  return await API.post(`/campaign/${formData.get('slug')}/donation`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    }
+  })
+    .then((response) => {
+      SweatAlert(response.data?.message || "Donasi berhasil dikirim!", "success");
+      setTimeout(() => {
+        window.location.href = `/campaign/${formData.get('slug')}`;
+      }, 2000);
+      return response.data;
+    })
+    .catch((error) => {
+      SweatAlert(error.response?.data?.message || "Gagal mengirim donasi", "error");
+      throw error;
+    });
+};

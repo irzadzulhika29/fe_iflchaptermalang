@@ -72,6 +72,11 @@ export const programDescriptions = {
   image: image.image_program,
 };
 
+export const eventDescriptions = {
+  title: "Event",
+  description: "Program & Project IFL Chapter Malang 2023/2024 berlandaskan pada delapan poin Sustainable Development Goals (SDGs) berdasarkan The Way Forward Indonesian yang dikeluarkan oleh United Nation Development Programme (UNDP) serta berdasarkan rancangan pembangunan yang dikeluarkan oleh Pemerintah Kota Malang. Poin SDGs tersebut good health & well being dan quality education."
+}
+
 export const programList = [
   {
     title: "We Care Them",

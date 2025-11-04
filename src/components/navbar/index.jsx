@@ -20,6 +20,7 @@ const aboutUsList = [
 ];
 
 const navList = [
+  { title: "Event", path: "/event" },
   { title: "Article", path: "/artikel" },
   { title: "Catalog", path: "/#shop" },
   { title: "Donate", path: "/donasi" },
@@ -55,39 +56,6 @@ const AboutUsDropdown = () => (
           </Button>
         </Link>
       ))}
-    </div>
-  </li>
-);
-
-const EventsDropdown = (
-  <li className="relative group">
-    <Button intent="navigation" className="!p-0 !shadow-none gap-1">
-      Events
-      <CaretDown
-        size={16}
-        className="mt-1 transition-all group-hover:rotate-180"
-      />
-    </Button>
-    <div className="dropdown_content rounded-xl overflow-hidden shadow-lg">
-      <i className="absolute w-4 h-4 rotate-45 -translate-x-1/2 -top-1 left-1/2 bg-light-1"></i>
-      <Link to="/program" aria-label="navigate-program">
-        <Button
-          intent="outline"
-          size="small"
-          className="!w-full !rounded-full !px-6 rounded-t-lg"
-        >
-          Program
-        </Button>
-      </Link>
-      <Link to="/project" aria-label="navigate-project">
-        <Button
-          intent="outline"
-          size="small"
-          className="!w-full !rounded-full !px-6 rounded-b-lg"
-        >
-          Project
-        </Button>
-      </Link>
     </div>
   </li>
 );
@@ -176,7 +144,6 @@ const Navbar = () => {
 
         <ul className={`navbar_field ${openNav ? "left-0" : "left-[-200%]"}`} style={{ backgroundColor: "#00B4D8" }}>
           <AboutUsDropdown />
-          {EventsDropdown}
           {navList.map((item, index) => (
             <li
               key={index}
