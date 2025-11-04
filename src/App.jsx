@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import {
   HomePage,
   AboutPage,
-  ProgramPage,
+  EventPage,
   ProjectPage,
   SingleBlogPage,
   ProfilePage,
@@ -53,6 +53,7 @@ import NotFoundPage from "./page/NotFoundPage";
 
 // protected route
 import { ProtectedDashboard, ProtectedRoles, ProtectedToken } from "./routes";
+import ChatbotPage from "./page/root/ChatbotPage";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -76,7 +77,8 @@ const App = () => {
       <ScrollToTop />
       <Routes>
         <Route exact path="/" element={<HomePage />} />
-        <Route path="/program" element={<ProgramPage />} />
+        <Route path="/event" element={<EventPage />} />
+        <Route path="/chatbot/:slug" element={<ChatbotPage />} />
         <Route path="/project" element={<ProjectPage />} />
         <Route path="/tentang-kami" element={<AboutPage />} />
         <Route path="/nondept" element={<NondeptPage />} />
