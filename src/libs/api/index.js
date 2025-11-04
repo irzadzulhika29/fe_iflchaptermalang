@@ -1,17 +1,27 @@
 import axios from "axios";
 
-const token = localStorage.getItem("token");
-
-// change this to your API base URL that you want to use (Deployed API URL)
-export const globalAPI = "https://admin.iflchaptermalang.org/api/v1";
+export const globalAPI = "https://experientially-unchallenging-amelie.ngrok-free.dev/api/v1";
 
 const API = axios.create({
   baseURL: `${globalAPI}`,
   headers: {
-    Authorization: `Bearer ${token}`,
     Accept: "application/json",
     "Access-Control-Allow-Origin": "*",
+    "ngrok-skip-browser-warning": "true",
   },
 });
+
+API.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default API;

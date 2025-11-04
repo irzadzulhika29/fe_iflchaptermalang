@@ -74,7 +74,7 @@ const RegisterPage = () => {
             register={register}
             title="Konfirmasi Kata Sandi"
             name="confirmPassword_register"
-            placeholder="Konfirmasi kata sandi anda"
+            placeholder= "Konfirmasi kata sandi anda"
           />
           {errors.confirmPassword_register && <small className="text-red-600">{errors.confirmPassword_register?.message}</small>}
 

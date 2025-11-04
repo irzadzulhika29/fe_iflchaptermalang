@@ -15,8 +15,10 @@ import ProgramPage from "./ProgramPage";
 import ProjectPage from "./ProjectPage";
 import SingleBlogPage from "./SingleBlogPage";
 import SingleDonationPage from "./SingleDonationPage";
+import EventPage from "./EventPage";
 
 export {
+  EventPage,
   BlogPage,
   SingleDonationPage,
   PaymentSuccessPage,
