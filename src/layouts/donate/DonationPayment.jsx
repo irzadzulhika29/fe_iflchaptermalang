@@ -137,15 +137,42 @@ const DonationPayment = ({
   const [proofFile, setProofFile] = useState(null);
   const [proofFileName, setProofFileName] = useState("");
   const [qrisUrl, setQrisUrl] = useState("");
+  const [displayDonationAmount, setDisplayDonationAmount] = useState(""); // Untuk display dengan format Rp
+
 
   const nameRef = useRef(null);
   const emailRef = useRef(null);
   const phoneRef = useRef(null);
   const donationAmountRef = useRef(null);
 
+  const formatRupiah = (value) => {
+    const numberString = value.replace(/[^,\d]/g, '');
+
+    const formatted = numberString.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    return formatted ? `Rp. ${formatted}` : '';
+  };
+
+  const parseRupiah = (value) => {
+    return value.replace(/[^0-9]/g, '');
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInput((prevState) => ({ ...prevState, [name]: value }));
+  };
+
+  const handleDonationAmountChange = (e) => {
+    const value = e.target.value;
+
+    const numericValue = parseRupiah(value);
+
+    setInput((prevState) => ({
+      ...prevState,
+      donation_amount: numericValue
+    }));
+
+    setDisplayDonationAmount(formatRupiah(numericValue));
   };
 
   const handleAnonymousChange = (e) => {
@@ -211,9 +238,11 @@ const DonationPayment = ({
       setError((prev) => ({ ...prev, email: true }));
       if (!scrollToRef) scrollToRef = emailRef;
     }
-    if (!input.donation_amount || parseFloat(input.donation_amount) <= 0) {
+    if (!input.donation_amount) {
       setError((prev) => ({ ...prev, donation_amount: true }));
       if (!scrollToRef) scrollToRef = donationAmountRef;
+    } else {
+      setError((prev) => ({ ...prev, donation_amount: false }));
     }
 
     if (scrollToRef) {
@@ -362,22 +391,20 @@ const DonationPayment = ({
             {isError.phone && (
               <small className="text-red-600">Please enter your phone</small>
             )}
-            <InputPaymentDonation
-              name="donation_amount"
-              title="Donation Amount"
-              placeholder="Enter your donation amount"
-              handleChange={handleChange}
-              type="number"
-              value={input.donation_amount}
-              required={true}
-              ref={donationAmountRef}
-            />
-            {isError.donation_amount && (
-              <small className="text-red-600">Mohon masukkan jumlah donasi</small>
-            )}
-            <p className="text-xs text-gray-500 -mt-4">
-              Minimal donasi: Rp 10.000
-            </p>
+
+            <div className="space-y-1" ref={donationAmountRef}>
+              <label className="text-black text-sm font-semibold">
+                Jumlah Donasi <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="donation_amount"
+                value={displayDonationAmount}
+                onChange={handleDonationAmountChange}
+                placeholder="Rp. 0"
+                className="w-full py-2 px-4 border border-gray-300 rounded-lg text-black bg-white focus:outline-none focus:ring-2 focus:ring-primary-1"
+              />
+            </div>
 
             <InputPaymentDonation
               name="donation_message"
@@ -419,7 +446,7 @@ const DonationPayment = ({
               <div className="flex justify-between items-center">
                 <span className="text-gray-600">Jumlah Donasi:</span>
                 <span className="text-xl font-bold text-primary-1">
-                  Rp {input.donation_amount ? parseInt(input.donation_amount).toLocaleString('id-ID') : '0'}
+                  {displayDonationAmount || "Rp. 0"}
                 </span>
               </div>
               <div className="mt-2 text-sm text-gray-600">
