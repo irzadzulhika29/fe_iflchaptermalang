@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useGetProfile } from "../../features/profile";
 import { useLogout } from "../../features/authentication";
 import { CloseMenu } from "../../utils/closeMenu";
@@ -26,39 +26,45 @@ const navList = [
   { title: "Donate", path: "/donasi" },
 ];
 
-const AboutUsDropdown = () => (
-  <li className="relative group">
-    <Button intent="navigation" className="!p-0 !shadow-none gap-1">
-      About Us
-      <CaretDown
-        size={16}
-        className="mt-1 transition-all group-hover:rotate-180"
-      />
-    </Button>
-    <div className="dropdown_content rounded-xl overflow-hidden shadow-lg">
-      <i className="absolute w-4 h-4 rotate-45 -translate-x-1/2 -top-1 left-1/2 bg-light-1"></i>
-      {aboutUsList.map((item, index) => (
-        <Link
-          key={index}
-          to={item.path}
-          aria-label={`navigate-${item.title
-            .toLowerCase()
-            .replace(/\s+/g, "-")}`}
-        >
-          <Button
-            intent="outline"
-            size="small"
-            className={`!w-full !rounded-xl !px-6 ${
-              index === 0 ? "rounded-t-lg" : ""
-            } ${index === aboutUsList.length - 1 ? "rounded-b-lg" : ""}`}
+const AboutUsDropdown = () => {
+  const location = useLocation();
+  const isActive = aboutUsList.some(item => location.pathname === item.path);
+
+  return (
+    <li className="relative group">
+      <Button intent="navigation" className="!p-0 !shadow-none gap-1 relative">
+        About Us
+        <CaretDown
+          size={16}
+          className="mt-1 transition-all group-hover:rotate-180"
+        />
+        <span className={`absolute bottom-0 left-0 h-[2px] bg-white transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
+          }`}></span>
+      </Button>
+      <div className="dropdown_content rounded-xl overflow-hidden shadow-lg">
+        <i className="absolute w-4 h-4 rotate-45 -translate-x-1/2 -top-1 left-1/2 bg-light-1"></i>
+        {aboutUsList.map((item, index) => (
+          <Link
+            key={index}
+            to={item.path}
+            aria-label={`navigate-${item.title
+              .toLowerCase()
+              .replace(/\s+/g, "-")}`}
           >
-            {item.title}
-          </Button>
-        </Link>
-      ))}
-    </div>
-  </li>
-);
+            <Button
+              intent="outline"
+              size="small"
+              className={`!w-full !rounded-xl !px-6 ${index === 0 ? "rounded-t-lg" : ""
+                } ${index === aboutUsList.length - 1 ? "rounded-b-lg" : ""}`}
+            >
+              {item.title}
+            </Button>
+          </Link>
+        ))}
+      </div>
+    </li>
+  );
+};
 
 const EventsClickDropdown = ({
   data,
@@ -97,6 +103,7 @@ const Navbar = () => {
   const [isPopoverOpen, setPopoverOpen] = React.useState(false);
 
   const navbarRef = React.useRef(null);
+  const location = useLocation();
 
   const { data, isLoading } = useGetProfile();
   const { mutate, isPending } = useLogout();
@@ -144,21 +151,27 @@ const Navbar = () => {
 
         <ul className={`navbar_field ${openNav ? "left-0" : "left-[-200%]"}`} style={{ backgroundColor: "#00B4D8" }}>
           <AboutUsDropdown />
-          {navList.map((item, index) => (
-            <li
-              key={index}
-              className="transition-all duration-300 scale-100 hover:scale-110"
-            >
-              <Links
-                to={item.path}
-                onClick={() => setOpenNav(false)}
-                intent="navigation"
-                ariaLabel={item.title}
+          {navList.map((item, index) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <li
+                key={index}
+                className="relative group"
               >
-                {item.title}
-              </Links>
-            </li>
-          ))}
+                <Links
+                  to={item.path}
+                  onClick={() => setOpenNav(false)}
+                  intent="navigation"
+                  ariaLabel={item.title}
+                  className="relative inline-block"
+                >
+                  {item.title}
+                  <span className={`absolute bottom-0 left-0 h-[2px] bg-white transition-all duration-300 ease-out ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                    }`}></span>
+                </Links>
+              </li>
+            );
+          })}
 
           {data?.data ? (
             <EventsClickDropdown
