@@ -2,9 +2,21 @@ import API from "../../../libs/api";
 import SweatAlert from "../../../utils/sweet-alert";
 
 export const getDonationByCampaignSlug = async (campaignSlug) => {
-  return await API.get(`/campaign/${campaignSlug}/donation`).then((response) => {
-    return response.data?.data;
-  });
+  return await API.get(`/campaign/${campaignSlug}/donation`)
+    .then((response) => {
+      console.log('API Response:', response.data);
+      return {
+        campaign: response.data?.data?.campaign || null,
+        donations: response.data?.data?.donations || []
+      };
+    })
+    .catch((error) => {
+      console.error('API Error:', error.response?.data || error.message);
+      return {
+        campaign: null,
+        donations: []
+      };
+    });
 };
 
 export const getDonationPaymentSuccess = async (orderId) => {
@@ -41,7 +53,7 @@ export const addDonationWithQRIS = async (formData) => {
     .then((response) => {
       SweatAlert(response.data?.message || "Donasi berhasil dikirim!", "success");
       setTimeout(() => {
-        window.location.href = `/campaign/${formData.get('slug')}`;
+        window.location.href = `/`;
       }, 2000);
       return response.data;
     })

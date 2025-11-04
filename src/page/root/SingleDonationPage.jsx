@@ -15,15 +15,25 @@ import HelmetLayout from "../../layouts/helmet";
 const SingleDonationPage = () => {
   const { slug } = useParams();
 
-  const { data: dataCampaign, isLoading } = useGetCampaignBySlug(slug);
+  const { data: dataCampaign, isLoading: campaignLoading } = useGetCampaignBySlug(slug);
 
-  const { data: donators } = useGetDonationByCampaignSlug(slug);
+  const { data: donationData, isLoading: donationLoading } = useGetDonationByCampaignSlug(slug);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoading && !dataCampaign) navigate("/404");
-  }, [navigate, dataCampaign, isLoading]);
+    if (!campaignLoading && !dataCampaign) navigate("/404");
+  }, [navigate, dataCampaign, campaignLoading]);
+
+  const isLoading = campaignLoading || donationLoading;
+
+  const safeData = {
+    dataCampaign: dataCampaign || {},
+    donaturData: donationData?.donations || [],
+    donatorsCount: donationData?.donations?.length || 0
+  };
+
+  console.log('🔍 Safe Data:', safeData);
 
   return (
     <div className="inner_body">
@@ -39,7 +49,11 @@ const SingleDonationPage = () => {
       {isLoading ? (
         <Loading height={100} width={100} className="m-20" />
       ) : (
-        <SingleDonation dataCampaign={dataCampaign} donators={donators?.donations?.length} />
+        <SingleDonation 
+          dataCampaign={safeData.dataCampaign} 
+          donaturData={safeData.donaturData}
+          donatorsCount={safeData.donatorsCount}
+        />
       )}
       <Footer />
     </div>

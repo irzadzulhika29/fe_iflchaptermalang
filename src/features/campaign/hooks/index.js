@@ -51,7 +51,6 @@ export const deleteCategoryCampaignByAdmin = async (categoryId) => {
     });
 };
 
-// campaign
 export const getAllCampaign = async () => {
   return await API.get("/campaign").then((response) => {
     return response.data?.data;
