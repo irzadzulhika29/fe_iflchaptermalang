@@ -13,9 +13,9 @@ const QRISDisplay = () => (
   <div className="flex flex-col items-center justify-center space-y-4 py-6">
     <h3 className="text-lg font-semibold text-gray-800">Scan QRIS Code</h3>
     <div className="bg-white p-4 rounded-lg shadow-md">
-      <img 
-        src={qrisImage} 
-        alt="QRIS Code" 
+      <img
+        src={qrisImage}
+        alt="QRIS Code"
         className="w-80 h-80 object-contain"
       />
     </div>
@@ -103,9 +103,8 @@ const InputPaymentDonation = ({
         value={value || ""}
         onChange={handleChange}
         placeholder={placeholder}
-        className={`w-full py-2 px-4 border border-gray-300 rounded-lg text-black ${
-          readOnly ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
-        } focus:outline-none focus:ring-2 focus:ring-primary-1`}
+        className={`w-full py-2 px-4 border border-gray-300 rounded-lg text-black ${readOnly ? 'bg-gray-100 cursor-not-allowed' : 'bg-white'
+          } focus:outline-none focus:ring-2 focus:ring-primary-1`}
       />
     </div>
   );
@@ -126,12 +125,14 @@ const DonationPayment = ({
     email: false,
     phone: false,
     proof: false,
+    donation_amount: false,
   });
   const [input, setInput] = useState({
     name: "",
     email: "",
     phone: "",
     donation_message: "",
+    donation_amount: "",
   });
   const [proofFile, setProofFile] = useState(null);
   const [proofFileName, setProofFileName] = useState("");
@@ -140,6 +141,7 @@ const DonationPayment = ({
   const nameRef = useRef(null);
   const emailRef = useRef(null);
   const phoneRef = useRef(null);
+  const donationAmountRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -152,11 +154,14 @@ const DonationPayment = ({
     if (checked) {
       setInput(prev => ({
         ...prev,
-        name: "Hamba Allah"
+        name: "Hamba Allah",
+        email: "hambaallah@gmail.com",
       }));
       setError(prev => ({
         ...prev,
-        name: false
+        name: false,
+        email: false,
+        phone: false,
       }));
     } else {
       setInput(prev => ({
@@ -166,24 +171,24 @@ const DonationPayment = ({
     }
   };
 
-  useEffect(() => {
-    const fetchQRIS = async () => {
-      if (dataCampaign.dataCampaign?.id) {
-        try {
-          const response = await API.get(`/campaign/${dataCampaign.dataCampaign.id}/qris`);
-          setQrisUrl(response.data?.qris_url || "");
-        } catch (error) {
-          console.error("Error fetching QRIS", error);
-        }
-      }
-    };
-    fetchQRIS();
-  }, [dataCampaign]);
+  // useEffect(() => {
+  //   const fetchQRIS = async () => {
+  //     if (dataCampaign.dataCampaign?.id) {
+  //       try {
+  //         const response = await API.get(`/campaign/${dataCampaign.dataCampaign.id}`);
+  //         setQrisUrl(response.data?.qris_url || "");
+  //       } catch (error) {
+  //         console.error("Error fetching QRIS", error);
+  //       }
+  //     }
+  //   };
+  //   fetchQRIS();
+  // }, [dataCampaign]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) { 
+      if (file.size > 5 * 1024 * 1024) {
         setError(prev => ({ ...prev, proof: true }));
         return;
       }
@@ -195,9 +200,9 @@ const DonationPayment = ({
 
   const handleNext = (e) => {
     e.preventDefault();
-    
+
     let scrollToRef = null;
-    
+
     if (!isAnonymous && !input.name && !dataProfile?.username) {
       setError((prev) => ({ ...prev, name: true }));
       if (!scrollToRef) scrollToRef = nameRef;
@@ -205,6 +210,10 @@ const DonationPayment = ({
     if (!input.email && !dataProfile?.email) {
       setError((prev) => ({ ...prev, email: true }));
       if (!scrollToRef) scrollToRef = emailRef;
+    }
+    if (!input.donation_amount || parseFloat(input.donation_amount) <= 0) {
+      setError((prev) => ({ ...prev, donation_amount: true }));
+      if (!scrollToRef) scrollToRef = donationAmountRef;
     }
 
     if (scrollToRef) {
@@ -236,6 +245,7 @@ const DonationPayment = ({
     formData.append("email", input.email || dataProfile?.email);
     formData.append("phone", input.phone || dataProfile?.phone);
     formData.append("donation_message", input.donation_message);
+    formData.append("donation_amount", input.donation_amount);
     formData.append("payment_proof", proofFile);
     formData.append("is_anonymous", isAnonymous);
 
@@ -258,8 +268,7 @@ const DonationPayment = ({
     >
       <Container className="max-w-lg lg:max-w-3xl py-6 px-4 sm:py-8 sm:px-6 md:py-10 md:px-8 space-y-6 bg-white shadow-lg rounded-lg">
         <ReturnButton />
-        
-        {/* Header Campaign Info */}
+
         <div className="flex flex-col items-start gap-4 md:flex-row md:gap-8">
           <BorderedImage src={dataCampaign.dataCampaign?.image} alt={dataCampaign.dataCampaign?.title} />
           <div className="flex-grow">
@@ -270,14 +279,13 @@ const DonationPayment = ({
               {dataCampaign.dataCampaign?.categories?.map((category, index) => (
                 <span
                   key={index}
-                  className={`${
-                    {
-                      kemanusiaan: "bg-orange-200 text-orange-600",
-                      kesehatan: "bg-green-200 text-green-600",
-                      pendidikan: "bg-purple-200 text-purple-600",
-                      "tanggap bencana": "bg-blue-200 text-blue-600",
-                    }[category] || "bg-gray-200 text-gray-600"
-                  } px-3 py-2 rounded-full text-sm font-medium`}
+                  className={`${{
+                    kemanusiaan: "bg-orange-200 text-orange-600",
+                    kesehatan: "bg-green-200 text-green-600",
+                    pendidikan: "bg-purple-200 text-purple-600",
+                    "tanggap bencana": "bg-blue-200 text-blue-600",
+                  }[category] || "bg-gray-200 text-gray-600"
+                    } px-3 py-2 rounded-full text-sm font-medium`}
                 >
                   {category}
                 </span>
@@ -290,21 +298,18 @@ const DonationPayment = ({
           </div>
         </div>
 
-        {/* Step Indicator */}
         <div className="flex items-center justify-center gap-4 py-4">
           <div className="flex items-center gap-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${
-              currentStep === 1 ? 'bg-primary-1 text-white' : 'bg-green-500 text-white'
-            }`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${currentStep === 1 ? 'bg-primary-1 text-white' : 'bg-green-500 text-white'
+              }`}>
               {currentStep === 1 ? '1' : '✓'}
             </div>
             <span className="text-sm font-medium text-gray-700">Data Diri</span>
           </div>
           <div className="w-12 h-1 bg-gray-300"></div>
           <div className="flex items-center gap-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${
-              currentStep === 2 ? 'bg-primary-1 text-white' : 'bg-gray-300 text-gray-600'
-            }`}>
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${currentStep === 2 ? 'bg-primary-1 text-white' : 'bg-gray-300 text-gray-600'
+              }`}>
               2
             </div>
             <span className="text-sm font-medium text-gray-700">QRIS & Bukti</span>
@@ -357,6 +362,22 @@ const DonationPayment = ({
             {isError.phone && (
               <small className="text-red-600">Please enter your phone</small>
             )}
+            <InputPaymentDonation
+              name="donation_amount"
+              title="Donation Amount"
+              placeholder="Enter your donation amount"
+              handleChange={handleChange}
+              type="number"
+              value={input.donation_amount}
+              required={true}
+              ref={donationAmountRef}
+            />
+            {isError.donation_amount && (
+              <small className="text-red-600">Mohon masukkan jumlah donasi</small>
+            )}
+            <p className="text-xs text-gray-500 -mt-4">
+              Minimal donasi: Rp 10.000
+            </p>
 
             <InputPaymentDonation
               name="donation_message"
@@ -393,11 +414,25 @@ const DonationPayment = ({
 
         {currentStep === 2 && (
           <form onSubmit={onSubmit} className="space-y-6">
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+              <h3 className="font-semibold text-gray-800 mb-2">Ringkasan Donasi</h3>
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">Jumlah Donasi:</span>
+                <span className="text-xl font-bold text-primary-1">
+                  Rp {input.donation_amount ? parseInt(input.donation_amount).toLocaleString('id-ID') : '0'}
+                </span>
+              </div>
+              <div className="mt-2 text-sm text-gray-600">
+                <p>Nama: {input.name || dataProfile?.username}</p>
+                <p>Email: {input.email || dataProfile?.email}</p>
+              </div>
+            </div>
+
             <QRISDisplay qrisUrl={qrisUrl} />
-            
+
             <hr className="border-gray-300 my-5" />
-            
-            <UploadProof 
+
+            <UploadProof
               onFileChange={handleFileChange}
               fileName={proofFileName}
               error={isError.proof}

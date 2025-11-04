@@ -44,18 +44,21 @@ const getDaysRemaining = (endDate) => {
   return differenceInDays > 0 ? differenceInDays : 0; // Jika selisih negatif, kembalikan 0
 };
 
-const SingleDonation = ({ dataCampaign, donators }) => {
+const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0 }) => {
   const navigate = useNavigate();
 
-  console.log("campaign data:", dataCampaign);
-  console.log("title", dataCampaign.dataCampaign.title);  // Memastikan title tersedia
+  const campaign = dataCampaign?.dataCampaign || dataCampaign || {};
+  const safeDonaturData = Array.isArray(donaturData) ? donaturData : [];
 
+  console.log("campaign data:", campaign);
+  console.log("donatur data:", safeDonaturData);
+  console.log("donators count:", donatorsCount);
 
   const handleShare = async () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: dataCampaign.dataCampaign.title,
+          title: campaign.title || "Donation Campaign",
           text: "Check out this donation campaign!",
           url: window.location.href,
         });
@@ -68,7 +71,9 @@ const SingleDonation = ({ dataCampaign, donators }) => {
     }
   };
 
-  const isCampaignClosed = new Date(dataCampaign.dataCampaign?.end_date) < new Date();
+  const isCampaignClosed = campaign?.end_date
+    ? new Date(campaign.end_date) < new Date()
+    : false;
 
   return (
     <Container className="space-y-8 text-dark-1">
@@ -173,11 +178,11 @@ const SingleDonation = ({ dataCampaign, donators }) => {
         />
 
         <div className="flex justify-between text-sm text-gray-400 mt-2">
-        <p>
-          <strong className="text-primary-1">
-            {dataCampaign.donaturData?.length || 0}
-          </strong> Donators
-        </p>
+          <p>
+            <strong className="text-primary-1">
+              {dataCampaign.donaturData?.length || 0}
+            </strong> Donators
+          </p>
           <p>
             <strong className="text-primary-1">
               {getDaysRemaining(dataCampaign.dataCampaign?.end_date)}
@@ -188,15 +193,13 @@ const SingleDonation = ({ dataCampaign, donators }) => {
 
         <Link
           to={`/donasi/${dataCampaign.dataCampaign?.slug}/pembayaran`}
-          className={`mt-4 justify-center flex ${
-            isCampaignClosed ? "pointer-events-none opacity-50" : ""
-          }`}
+          className={`mt-4 justify-center flex ${isCampaignClosed ? "pointer-events-none opacity-50" : ""
+            }`}
           aria-label="navigate-payment-donate"
         >
           <Button
-            className={`w-1/2 bg-primary-1 text-white py-3 rounded-full text-lg font-semibold hover:bg-primary-2 ${
-              isCampaignClosed ? "bg-gray-300 hover:bg-gray-300 cursor-not-allowed" : ""
-            }`}
+            className={`w-1/2 bg-primary-1 text-white py-3 rounded-full text-lg font-semibold hover:bg-primary-2 ${isCampaignClosed ? "bg-gray-300 hover:bg-gray-300 cursor-not-allowed" : ""
+              }`}
             ariaLabel="donate-now"
             disabled={isCampaignClosed} // Disable button when campaign is closed
           >
@@ -259,31 +262,41 @@ const SingleDonation = ({ dataCampaign, donators }) => {
       <hr className="border-gray-300 mt-4" />
 
       <div className="space-y-6">
-        <h2 className="text-xl font-bold">Donation</h2>
+        <h2 className="text-xl font-bold">Donation {donatorsCount > 0 && `(${donatorsCount})`}</h2>
         <div
           className="flex flex-wrap -mx-2 overflow-y-auto"
           style={{ maxHeight: "200px" }}
         >
-          {dataCampaign.donaturData?.map((donator, index) => (
-            <div key={index} className="w-full md:w-1/2 px-2 mb-4">
-              <div className="flex justify-between items-center p-4 bg-gray-100 rounded-lg">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gray-300 rounded-full" />
-                  <div>
-                    <h4 className="text-lg font-semibold">
-                      {donator.name}
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      {getRelativeTime(donator.updated_at)}
-                    </p>
+          {safeDonaturData.length === 0 ? (
+            <div className="w-full text-center py-8">
+              <p className="text-gray-400 text-lg">Belum ada donasi untuk campaign ini</p>
+            </div>
+          ) : (
+            safeDonaturData
+              .filter(donator => donator?.status === "paid" || donator?.status === "pending")
+              .map((donator, index) => (
+                <div key={donator?.donation_id || index} className="w-full md:w-1/2 px-2 mb-4">
+                  <div className="flex justify-between items-center p-4 bg-gray-100 rounded-lg">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-gray-300 rounded-full" />
+                      <div>
+                        <h4 className="text-lg font-semibold">
+                          {donator?.name || "Anonymous"}
+                        </h4>
+                        <p className="text-sm text-gray-500">
+                          {donator?.updated_at || donator?.created_at
+                            ? getRelativeTime(donator.updated_at || donator.created_at)
+                            : "Recently"}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-primary-1 font-semibold">
+                      Rp {formatCurrency(donator?.donation_amount || 0)}
+                    </div>
                   </div>
                 </div>
-                <div className="text-primary-1 font-semibold">
-                  Rp {formatCurrency(donator.donation_amount)}
-                </div>
-              </div>
-            </div>
-          ))}
+              ))
+          )}
         </div>
       </div>
 
@@ -292,25 +305,43 @@ const SingleDonation = ({ dataCampaign, donators }) => {
       <div className="space-y-6">
         <h2 className="text-xl font-bold">Good Prayers</h2>
         <div className="space-y-4 overflow-y-auto" style={{ maxHeight: "400px" }}>
-          {dataCampaign.donaturData?.map((prayer, index) => (
-            <div
-              key={index}
-              className="flex items-start space-x-4 p-4 rounded-lg"
-            >
-              <div className="w-12 h-12 bg-gray-300 rounded-full flex-shrink-0" />
-              <div>
-                <h4 className="text-lg font-semibold">
-                  {prayer.name}
-                </h4>
-                <p className="text-sm text-gray-500">
-                      {getRelativeTime(prayer.updated_at)}
-                </p>
-                <p className="text-sm text-gray-600 mt-2">
-                  {prayer.donation_message || "No message"}
-                </p>
-              </div>
+          {safeDonaturData.filter(prayer =>
+            prayer?.donation_message &&
+            prayer.donation_message.trim() !== "" &&
+            (prayer?.status === "paid" || prayer?.status === "pending")
+          ).length === 0 ? (
+            <div className="text-center py-8">
+              <p className="text-gray-400 text-lg">Belum ada doa untuk campaign ini</p>
             </div>
-          ))}
+          ) : (
+            safeDonaturData
+              .filter(prayer =>
+                prayer?.donation_message &&
+                prayer.donation_message.trim() !== "" &&
+                (prayer?.status === "paid" || prayer?.status === "pending")
+              )
+              .map((prayer, index) => (
+                <div
+                  key={prayer?.donation_id || index}
+                  className="flex items-start space-x-4 p-4 rounded-lg"
+                >
+                  <div className="w-12 h-12 bg-gray-300 rounded-full flex-shrink-0" />
+                  <div className="flex-1">
+                    <h4 className="text-lg font-semibold">
+                      {prayer?.name || "Anonymous"}
+                    </h4>
+                    <p className="text-sm text-gray-500">
+                      {prayer?.updated_at || prayer?.created_at
+                        ? getRelativeTime(prayer.updated_at || prayer.created_at)
+                        : "Recently"}
+                    </p>
+                    <p className="text-sm text-gray-600 mt-2">
+                      {prayer?.donation_message || ""}
+                    </p>
+                  </div>
+                </div>
+              ))
+          )}
         </div>
       </div>
 
