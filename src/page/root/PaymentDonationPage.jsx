@@ -30,11 +30,11 @@ const PaymentDonationPage = () => {
   return (
     <div className="inner_body">
       <HelmetLayout
-        title={`${dataCampaign?.title || null} | Indonesian Future Leaders Chapter Malang`}
+        title={`${dataCampaign?.title || ""} | Indonesian Future Leaders Chapter Malang`}
         description="Indonesian Future Leaders memiliki acara atau agenda yang berkaitan dengan berdonasi kepada masyarakat yang membutuhkan. Pembayaran donasi pada beberapa agenda yang diadakan IFL Chapter Malang ini bisa melalui transfer maupun scan barcode"
         pageLink="/donasi/*/pembayaran"
         keywords={`indonesian future leaders, ifl malang, ifl chapter malang, ifl, isu terkini, ifl donasi, donasi, pembayaran donasi, ifl berdonasi, ${
-          dataCampaign?.title || null
+          dataCampaign?.title || ""
         }`}
       />
       <Navbar />
