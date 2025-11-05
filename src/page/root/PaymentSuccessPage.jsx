@@ -69,7 +69,7 @@ const PaymentSuccessPage = () => {
   return (
     <div className="inner_body">
       <HelmetLayout
-        title={`Donasi ${status || null} | Indonesian Future Leaders Chapter Malang`}
+        title={`Donasi ${status || ""} | Indonesian Future Leaders Chapter Malang`}
         description="Halaman ini digunakan hanya untuk melihat invois pembayaran pada donasi yang diadakan indonesian future leaders"
         pageLink="/donasi/pembayaran/sukses"
         keywords="indonesian future leaders, ifl malang, ifl chapter malang, ifl, pembayaran sukses, pembayaran berhasil"
