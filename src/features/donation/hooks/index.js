@@ -53,7 +53,7 @@ export const addDonationWithQRIS = async (formData) => {
     .then((response) => {
       SweatAlert(response.data?.message || "Donasi berhasil dikirim!", "success");
       setTimeout(() => {
-        window.location.href = `/`;
+        window.location.href = `/donasi`;
       }, 2000);
       return response.data;
     })

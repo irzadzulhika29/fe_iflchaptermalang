@@ -34,7 +34,7 @@ const Card = ({ campaignData }) => {
     <div className="grid grid-cols-1 gap-12 mt-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 place-items-center">
       {campaignData?.map((item, index) => {
         const percentDonation = Math.round(
-          (item?.current_donation / item?.target_donation) * 100
+          (item?.total_collected / item?.target_donation) * 100
         );
         return (
           <article key={index} className="card !rounded-2xl">
@@ -69,7 +69,7 @@ const Card = ({ campaignData }) => {
               <ProgressBar
                 progress={percentDonation}
                 target_donation={item?.target_donation}
-                current_donation={item?.current_donation}
+                current_donation={item?.total_collected}
               />
             </div>
             <Link

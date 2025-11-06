@@ -7,7 +7,7 @@ import DonateSection from "../../layouts/donate";
 import HelmetLayout from "../../layouts/helmet";
 
 const DonationPage = () => {
-  const { data: campaignData, isLoading } = useGetAllCampaign();
+  const { data: campaignData, isLoading, donaturData } = useGetAllCampaign();
 
   return (
     <div className="inner_body">
@@ -18,7 +18,7 @@ const DonationPage = () => {
         keywords="indonesian future leaders, ifl malang, ifl chapter malang, ifl, isu terkini, ifl donasi, donasi, donation, campaign"
       />
       <Navbar />
-      <DonateSection campaignData={campaignData?.campaigns} isLoading={isLoading} />
+      <DonateSection campaignData={campaignData?.campaigns} donaturData={campaignData?.donaturs} isLoading={isLoading} />
       <Footer />
     </div>
   );

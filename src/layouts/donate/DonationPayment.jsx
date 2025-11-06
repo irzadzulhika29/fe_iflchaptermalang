@@ -299,13 +299,13 @@ const DonationPayment = ({
         <ReturnButton />
 
         <div className="flex flex-col items-start gap-4 md:flex-row md:gap-8">
-          <BorderedImage src={dataCampaign.dataCampaign?.image} alt={dataCampaign.dataCampaign?.title} />
+          <BorderedImage src={dataCampaign.dataCampaign?.campaign.image} alt={dataCampaign.dataCampaign?.campaign.title} />
           <div className="flex-grow">
             <h1 className="text-lg font-bold text-gray-800 sm:text-xl md:text-2xl">
               Our hands extended in kindness could reach millions of hearts!
             </h1>
             <div className="flex gap-2 my-2">
-              {dataCampaign.dataCampaign?.categories?.map((category, index) => (
+              {dataCampaign.dataCampaign?.campaign.categories?.map((category, index) => (
                 <span
                   key={index}
                   className={`${{
@@ -321,8 +321,8 @@ const DonationPayment = ({
               ))}
             </div>
             <p className="text-sm text-gray-600 sm:text-base">
-              You're donating to <strong>{dataCampaign.dataCampaign?.title}</strong>. The
-              fund will benefit <strong>{dataCampaign.dataCampaign?.receiver}</strong>.
+              You're donating to <strong>{dataCampaign.dataCampaign?.campaign.title}</strong>. The
+              fund will benefit <strong>{dataCampaign.dataCampaign?.campaign.receiver}</strong>.
             </p>
           </div>
         </div>
