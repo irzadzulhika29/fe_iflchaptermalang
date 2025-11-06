@@ -22,17 +22,17 @@ const getRelativeTime = (dateString) => {
   const diffInYears = Math.floor(diffInMonths / 12);
 
   if (diffInYears > 0) {
-    return `${diffInYears} ${diffInYears === 1 ? 'year' : 'years'} ago`;
+    return `${diffInYears} ${diffInYears === 1 ? 'Tahun' : 'Tahun'} yang lalu`;
   } else if (diffInMonths > 0) {
-    return `${diffInMonths} ${diffInMonths === 1 ? 'month' : 'months'} ago`;
+    return `${diffInMonths} ${diffInMonths === 1 ? 'Bulan' : 'Bulan'} yang lalu`;
   } else if (diffInDays > 0) {
-    return `${diffInDays} ${diffInDays === 1 ? 'day' : 'days'} ago`;
+    return `${diffInDays} ${diffInDays === 1 ? 'Hari' : 'Hari'} yang lalu`;
   } else if (diffInHours > 0) {
-    return `${diffInHours} ${diffInHours === 1 ? 'hour' : 'hours'} ago`;
+    return `${diffInHours} ${diffInHours === 1 ? 'Jam' : 'Jam'} yang lalu`;
   } else if (diffInMinutes > 0) {
-    return `${diffInMinutes} ${diffInMinutes === 1 ? 'minute' : 'minutes'} ago`;
+    return `${diffInMinutes} ${diffInMinutes === 1 ? 'Menit' : 'Menit'} yang lalu`;
   } else {
-    return 'just now';
+    return 'Baru Saja';
   }
 };
 
@@ -47,8 +47,15 @@ const getDaysRemaining = (endDate) => {
 const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0 }) => {
   const navigate = useNavigate();
 
-  const campaign = dataCampaign?.dataCampaign || dataCampaign || {};
-  const safeDonaturData = Array.isArray(donaturData) ? donaturData : [];
+  const campaign = dataCampaign.dataCampaign || dataCampaign || {};
+  const safeDonaturData = Array.isArray(dataCampaign.dataCampaign?.donors) ? dataCampaign.dataCampaign?.donors : [];
+
+  const filteredDonors = safeDonaturData;
+  const filteredPrayers = safeDonaturData.filter(
+    (prayer) =>
+      prayer?.donation_message &&
+      prayer.donation_message.trim() !== ""
+  );
 
   console.log("campaign data:", campaign);
   console.log("donatur data:", safeDonaturData);
@@ -58,7 +65,7 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
     if (navigator.share) {
       try {
         await navigator.share({
-          title: campaign.title || "Donation Campaign",
+          title: campaign.campaign?.title || "Donation Campaign",
           text: "Check out this donation campaign!",
           url: window.location.href,
         });
@@ -88,14 +95,14 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
       </button>
 
       <div className="text-sm text-gray-500">
-        Published at: {new Date(dataCampaign.dataCampaign?.publish_date).toLocaleString()}
+        Published at: {new Date(dataCampaign.dataCampaign?.campaign?.publish_date).toLocaleString()}
       </div>
 
       <div className="relative w-full">
         <Image
-          src={dataCampaign.dataCampaign?.image}
+          src={dataCampaign.dataCampaign?.campaign?.image || "" || "https://via.placeholder.com/150"}
           className="w-full rounded-xl"
-          description={dataCampaign.dataCampaign?.title}
+          description={dataCampaign.dataCampaign?.campaign?.title}
         />
         <div className="absolute bottom-0 left-0 w-32 h-32 border-b-8 border-l-8 border-primary-1 rounded-bl-3xl"></div>
         <div className="absolute top-0 right-0 w-32 h-32 border-t-8 border-r-8 border-primary-1 rounded-tr-3xl"></div>
@@ -121,11 +128,11 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
       </div>
 
       <h1 className="text-2xl font-bold">
-        {dataCampaign.dataCampaign?.title || "Campaign Title"}
+        {dataCampaign.dataCampaign?.campaign?.title || "Campaign Title"}
       </h1>
 
       <div className="flex flex-wrap gap-2 mt-2">
-        {dataCampaign.dataCampaign?.categories?.map((cat, index) => {
+        {dataCampaign.dataCampaign?.campaign?.categories?.map((cat, index) => {
           let bgColor = "";
           let textColor = "";
 
@@ -163,36 +170,36 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
         <div className="text-lg font-medium">Donation Collected</div>
         <div className="flex items-center text-lg font-semibold">
           <span className="text-primary-1">
-            Rp {formatCurrency(dataCampaign.dataCampaign?.current_donation)}
+            Rp {formatCurrency(dataCampaign.dataCampaign?.donation_summary?.total_collected)}
           </span>
           <span className="text-gray-500 ml-2">from target</span>
           <span className="text-gray-900 ml-2">
-            Rp {formatCurrency(dataCampaign.dataCampaign?.target_donation)}
+            Rp {formatCurrency(dataCampaign.dataCampaign?.campaign?.target_donation)}
           </span>
         </div>
 
         <ProgressBar2
-          current_donation={dataCampaign.dataCampaign?.current_donation}
-          target_donation={dataCampaign.dataCampaign?.target_donation}
+          current_donation={dataCampaign.dataCampaign?.donation_summary?.total_collected}
+          target_donation={dataCampaign.dataCampaign?.campaign?.target_donation}
           className="h-2"
         />
 
         <div className="flex justify-between text-sm text-gray-400 mt-2">
           <p>
             <strong className="text-primary-1">
-              {dataCampaign.donaturData?.length || 0}
+              {dataCampaign.dataCampaign?.donation_summary?.donor_count || 0}
             </strong> Donators
           </p>
           <p>
             <strong className="text-primary-1">
-              {getDaysRemaining(dataCampaign.dataCampaign?.end_date)}
+              {getDaysRemaining(dataCampaign.dataCampaign?.campaign?.end_date)}
             </strong>{" "}
             days left
           </p>
         </div>
 
         <Link
-          to={`/donasi/${dataCampaign.dataCampaign?.slug}/pembayaran`}
+          to={`/donasi/${dataCampaign.dataCampaign?.campaign?.slug}/pembayaran`}
           className={`mt-4 justify-center flex ${isCampaignClosed ? "pointer-events-none opacity-50" : ""
             }`}
           aria-label="navigate-payment-donate"
@@ -213,7 +220,7 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
       <div className="space-y-6">
         <h2 className="text-xl font-bold">Information</h2>
         <DonationTimeline
-          openDate={new Date(dataCampaign.dataCampaign?.publish_date).toLocaleDateString(
+          openDate={new Date(dataCampaign.dataCampaign?.campaign?.publish_date).toLocaleDateString(
             "en-GB",
             {
               day: "numeric",
@@ -221,7 +228,7 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
               year: "numeric",
             }
           )}
-          closedDate={new Date(dataCampaign.dataCampaign?.end_date).toLocaleDateString(
+          closedDate={new Date(dataCampaign.dataCampaign?.campaign?.end_date).toLocaleDateString(
             "en-GB",
             {
               day: "numeric",
@@ -230,7 +237,7 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
             }
           )}
           distributedDate={new Date(
-            dataCampaign.dataCampaign?.distributed_date
+            dataCampaign.dataCampaign?.campaign?.distributed_date
           ).toLocaleDateString("en-GB", {
             day: "numeric",
             month: "long",
@@ -241,7 +248,7 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
           <WarningCircle size={24} weight="bold" className="text-orange-600" />
           <p className="text-sm">
             This Campaign is still open for donation until{" "}
-            {new Date(dataCampaign.dataCampaign?.end_date).toLocaleDateString("en-GB", {
+            {new Date(dataCampaign.dataCampaign?.campaign?.end_date).toLocaleDateString("en-GB", {
               day: "numeric",
               month: "long",
               year: "numeric",
@@ -255,7 +262,7 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
       <div className="space-y-4">
         <h2 className="text-xl font-bold">Background Story</h2>
         <p className="text-sm text-gray-600 leading-relaxed">
-          {dataCampaign.dataCampaign?.body || ""}
+          {dataCampaign.dataCampaign?.campaign?.body || ""}
         </p>
       </div>
 
@@ -267,35 +274,31 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
           className="flex flex-wrap -mx-2 overflow-y-auto"
           style={{ maxHeight: "200px" }}
         >
-          {safeDonaturData.length === 0 ? (
+          {filteredDonors.length === 0 ? (
             <div className="w-full text-center py-8">
               <p className="text-gray-400 text-lg">Belum ada donasi untuk campaign ini</p>
             </div>
           ) : (
-            safeDonaturData
-              .filter(donator => donator?.status === "paid" || donator?.status === "pending")
-              .map((donator, index) => (
-                <div key={donator?.donation_id || index} className="w-full md:w-1/2 px-2 mb-4">
-                  <div className="flex justify-between items-center p-4 bg-gray-100 rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-gray-300 rounded-full" />
-                      <div>
-                        <h4 className="text-lg font-semibold">
-                          {donator?.name || "Anonymous"}
-                        </h4>
-                        <p className="text-sm text-gray-500">
-                          {donator?.updated_at || donator?.created_at
-                            ? getRelativeTime(donator.updated_at || donator.created_at)
-                            : "Recently"}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-primary-1 font-semibold">
-                      Rp {formatCurrency(donator?.donation_amount || 0)}
-                    </div>
+            filteredDonors.map((donator, index) => (
+              <div key={donator?.donation_id || index} className="w-full sm:w-1/2 px-2 mb-4">                <div className="flex justify-between items-center p-4 bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 rounded-lg">
+                <div className="flex items-center space-x-4">
+                  <div>
+                    <h4 className="text-lg font-semibold">
+                      {donator?.name || "Anonymous"}
+                    </h4>
+                    <p className="text-sm text-gray-500">
+                      {donator?.donated_at || donator?.created_at
+                        ? getRelativeTime(donator.donated_at || donator.created_at)
+                        : "Baru Saja"}
+                    </p>
                   </div>
                 </div>
-              ))
+                <div className="text-primary-1 font-semibold">
+                  Rp {formatCurrency(donator?.donation_amount || 0)}
+                </div>
+              </div>
+              </div>
+            ))
           )}
         </div>
       </div>
@@ -305,42 +308,31 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
       <div className="space-y-6">
         <h2 className="text-xl font-bold">Good Prayers</h2>
         <div className="space-y-4 overflow-y-auto" style={{ maxHeight: "400px" }}>
-          {safeDonaturData.filter(prayer =>
-            prayer?.donation_message &&
-            prayer.donation_message.trim() !== "" &&
-            (prayer?.status === "paid" || prayer?.status === "pending")
-          ).length === 0 ? (
+          {filteredPrayers.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-gray-400 text-lg">Belum ada doa untuk campaign ini</p>
             </div>
           ) : (
-            safeDonaturData
-              .filter(prayer =>
-                prayer?.donation_message &&
-                prayer.donation_message.trim() !== "" &&
-                (prayer?.status === "paid" || prayer?.status === "pending")
-              )
-              .map((prayer, index) => (
-                <div
-                  key={prayer?.donation_id || index}
-                  className="flex items-start space-x-4 p-4 rounded-lg"
-                >
-                  <div className="w-12 h-12 bg-gray-300 rounded-full flex-shrink-0" />
-                  <div className="flex-1">
-                    <h4 className="text-lg font-semibold">
-                      {prayer?.name || "Anonymous"}
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      {prayer?.updated_at || prayer?.created_at
-                        ? getRelativeTime(prayer.updated_at || prayer.created_at)
-                        : "Recently"}
-                    </p>
-                    <p className="text-sm text-gray-600 mt-2">
-                      {prayer?.donation_message || ""}
-                    </p>
-                  </div>
+            filteredPrayers.map((prayer, index) => (
+              <div
+                key={prayer?.donation_id || index}
+                className="flex items-start space-x-4 p-4 rounded-lg"
+              >
+                <div className="flex-1">
+                  <h4 className="text-lg font-semibold">
+                    {prayer?.name || "Anonymous"}
+                  </h4>
+                  <p className="text-sm text-gray-500">
+                    {prayer?.donated_at || prayer?.created_at
+                      ? getRelativeTime(prayer.donated_at || prayer.created_at)
+                      : "Baru Saja"}
+                  </p>
+                  <p className="text-sm text-gray-600 mt-2">
+                    {prayer?.donation_message || ""}
+                  </p>
                 </div>
-              ))
+              </div>
+            ))
           )}
         </div>
       </div>
