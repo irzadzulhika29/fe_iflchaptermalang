@@ -70,7 +70,7 @@ const ROLES = {
   bismar: "bismar",
   copywriter: "copywriter",
 };
-
+ 
 const App = () => {
   return (
     <BrowserRouter>
@@ -174,7 +174,6 @@ const App = () => {
 
         <Route path="/coming-soon" element={<ComingSoon />} />
         <Route path="*" element={<NotFoundPage />} />
-        <Route path="/404" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
