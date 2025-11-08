@@ -47,7 +47,7 @@ const getDaysRemaining = (endDate) => {
 const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0 }) => {
   const navigate = useNavigate();
 
-  const campaign = dataCampaign.dataCampaign || dataCampaign || {};
+  const campaign = dataCampaign.dataCampaign.campaign || dataCampaign || {};
   const safeDonaturData = Array.isArray(dataCampaign.dataCampaign?.donors) ? dataCampaign.dataCampaign?.donors : [];
 
   const filteredDonors = safeDonaturData;
@@ -81,7 +81,6 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
   const isCampaignClosed = campaign?.end_date
     ? new Date(campaign.end_date) < new Date()
     : false;
-
   return (
     <Container className="space-y-8 text-dark-1">
       <button
@@ -208,7 +207,7 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
             className={`w-1/2 bg-primary-1 text-white py-3 rounded-full text-lg font-semibold hover:bg-primary-2 ${isCampaignClosed ? "bg-gray-300 hover:bg-gray-300 cursor-not-allowed" : ""
               }`}
             ariaLabel="donate-now"
-            disabled={isCampaignClosed} // Disable button when campaign is closed
+            disabled={isCampaignClosed}
           >
             {isCampaignClosed ? "Campaign Closed" : "Donate Now"}
           </Button>
