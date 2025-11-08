@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 
 export default function ChatHeader({ program, onBack }) {
   return (
-    <div className="bg-white/50 backdrop-blur-sm fixed left-0 right-0 mx-auto w-11/12 rounded-2xl shadow-sm border border-slate-100 p-4 flex items-center justify-between">
+    <div className="bg-white fixed left-0 right-0 mx-auto w-11/12 rounded-2xl shadow-sm border border-slate-100 p-4 flex items-center justify-between">
       <div className="flex items-center gap-3">
         <button
           onClick={onBack}

@@ -62,3 +62,41 @@ export const addDonationWithQRIS = async (formData) => {
       throw error;
     });
 };
+
+export const createMidtransTransaction = async (body) => {
+  const slug = body.slug;
+  
+  const payload = {
+    name: body.name,
+    email: body.email,
+    phone: body.phone,
+    donation_amount: parseInt(body.donation_amount), // Pastikan integer
+    donation_message: body.donation_message || "",
+    anonymous: body.is_anonymous || false,
+  };
+
+  return await API.post(`/transaction/create/${slug}`, payload)
+    .then((response) => {
+      const data = response.data?.data;
+      
+      if (data?.snap_token) {
+        return {
+          success: true,
+          snap_token: data.snap_token,
+          transaction_id: data.transaction_id,
+          donation_id: data.donation_id,
+          invoice: data.invoice,
+          donation_amount: data.donation_amount,
+        };
+      }
+      
+      throw new Error("Snap token not received");
+    })
+    .catch((error) => {
+      SweatAlert(
+        error.response?.data?.message || "Gagal membuat transaksi",
+        "error"
+      );
+      throw error;
+    });
+};

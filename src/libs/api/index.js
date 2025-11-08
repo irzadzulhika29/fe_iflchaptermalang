@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const globalAPI = "https://experientially-unchallenging-amelie.ngrok-free.dev/api/v1";
+export const globalAPI = import.meta.env.VITE_TEST_API;
 
 const API = axios.create({
   baseURL: `${globalAPI}`,
