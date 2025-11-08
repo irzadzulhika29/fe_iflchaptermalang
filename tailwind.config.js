@@ -55,7 +55,22 @@ export default {
         '16': '16px', 
         '20': '20px', 
       },
+      keyframes: {
+        shimmer: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+      },
+      animation: {
+        shimmer: 'shimmer 2s infinite',
+        fadeIn: 'fadeIn 0.5s ease-in-out',
+      },
     },
   },
   plugins: [],
 };
+

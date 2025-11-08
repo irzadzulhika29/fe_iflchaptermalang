@@ -8,6 +8,8 @@ import Loading from "../../components/loader";
 import API from "../../libs/api";
 import qrisImage from "../../assets/image/donation/qrs_donasi.jpg";
 import { addDonationWithQRIS } from "../../features/donation/hooks";
+import { createMidtransTransaction } from "../../features/donation/hooks";
+import { initMidtransSnap } from "../../utils/midtrans";
 
 const QRISDisplay = () => (
   <div className="flex flex-col items-center justify-center space-y-4 py-6">
@@ -263,25 +265,59 @@ const DonationPayment = ({
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    if (!proofFile) {
-      setError((prev) => ({ ...prev, proof: true }));
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("slug", slug);
-    formData.append("name", input.name || dataProfile?.username);
-    formData.append("email", input.email || dataProfile?.email);
-    formData.append("phone", input.phone || dataProfile?.phone);
-    formData.append("donation_message", input.donation_message);
-    formData.append("donation_amount", input.donation_amount);
-    formData.append("payment_proof", proofFile);
-    formData.append("is_anonymous", isAnonymous);
+    const transactionData = {
+      slug: slug,
+      name: input.name || dataProfile?.username,
+      email: input.email || dataProfile?.email,
+      phone: input.phone || dataProfile?.phone || "0000000000",
+      donation_amount: input.donation_amount,
+      donation_message: input.donation_message || "",
+      is_anonymous: isAnonymous,
+    };
 
     try {
-      await addDonationWithQRIS(formData);
+      // Show loading
+      setCurrentStep(3);
+
+      const result = await createMidtransTransaction(transactionData);
+
+      if (result.success && result.snap_token) {
+        initMidtransSnap(result.snap_token, {
+          onSuccess: (paymentResult) => {
+            SweatAlert(
+              `Pembayaran berhasil! Invoice: ${result.invoice}`,
+              "success"
+            );
+
+            setTimeout(() => {
+              window.location.href = `/donasi/${slug}/success?order_id=${paymentResult.order_id}`;
+            }, 2000);
+          },
+          onPending: (paymentResult) => {
+            SweatAlert(
+              "Pembayaran pending. Silakan selesaikan pembayaran Anda.",
+              "warning"
+            );
+
+            setTimeout(() => {
+              window.location.href = `/donasi`;
+            }, 2000);
+          },
+          onError: (paymentResult) => {
+            SweatAlert(
+              "Pembayaran gagal. Silakan coba lagi.",
+              "error"
+            );
+            setCurrentStep(2);
+          },
+          onClose: () => {
+            setCurrentStep(2);
+          },
+        });
+      }
     } catch (error) {
-      console.error("Error processing donation", error);
+      console.error("Error creating transaction:", error);
+      setCurrentStep(2); // Back to form
     }
   };
 
@@ -337,11 +373,12 @@ const DonationPayment = ({
           </div>
           <div className="w-12 h-1 bg-gray-300"></div>
           <div className="flex items-center gap-2">
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${currentStep === 2 ? 'bg-primary-1 text-white' : 'bg-gray-300 text-gray-600'
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${currentStep === 2 ? 'bg-primary-1 text-white' :
+                currentStep === 3 ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-600'
               }`}>
-              2
+              {currentStep === 3 ? '✓' : '2'}
             </div>
-            <span className="text-sm font-medium text-gray-700">QRIS & Bukti</span>
+            <span className="text-sm font-medium text-gray-700">Pembayaran</span>
           </div>
         </div>
 
@@ -443,27 +480,38 @@ const DonationPayment = ({
           <form onSubmit={onSubmit} className="space-y-6">
             <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
               <h3 className="font-semibold text-gray-800 mb-2">Ringkasan Donasi</h3>
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center mb-3">
                 <span className="text-gray-600">Jumlah Donasi:</span>
                 <span className="text-xl font-bold text-primary-1">
                   {displayDonationAmount || "Rp. 0"}
                 </span>
               </div>
-              <div className="mt-2 text-sm text-gray-600">
+              <div className="mt-2 text-sm text-gray-600 space-y-1">
                 <p>Nama: {input.name || dataProfile?.username}</p>
                 <p>Email: {input.email || dataProfile?.email}</p>
+                {input.phone && <p>Phone: {input.phone}</p>}
+                {input.donation_message && (
+                  <p className="mt-2 italic">"{input.donation_message}"</p>
+                )}
               </div>
             </div>
 
-            <QRISDisplay qrisUrl={qrisUrl} />
-
-            <hr className="border-gray-300 my-5" />
-
-            <UploadProof
-              onFileChange={handleFileChange}
-              fileName={proofFileName}
-              error={isError.proof}
-            />
+            <div className="bg-gradient-to-r from-cyan-50 to-blue-50 p-4 rounded-lg border border-cyan-200">
+              <h3 className="font-semibold text-gray-800 mb-2 flex items-center gap-2">
+                <span>💳</span>
+                Metode Pembayaran
+              </h3>
+              <p className="text-sm text-gray-600">
+                Anda akan diarahkan ke halaman pembayaran Midtrans yang aman.
+                Pilih metode pembayaran favorit Anda:
+              </p>
+              <ul className="mt-2 text-sm text-gray-600 space-y-1 ml-4">
+                <li>• Kartu Kredit/Debit</li>
+                <li>• Transfer Bank (BCA, Mandiri, BNI, BRI, dll)</li>
+                <li>• E-Wallet (GoPay, OVO, DANA, dll)</li>
+                <li>• Gerai (Indomaret, Alfamart)</li>
+              </ul>
+            </div>
 
             <div className="flex gap-4 mt-8">
               <Button
@@ -479,7 +527,7 @@ const DonationPayment = ({
                 className="w-2/3 py-3 bg-primary-1 text-white border-2 border-transparent hover:bg-white hover:border-primary-1 hover:text-primary-1"
                 disabled={isPending}
               >
-                {isPending ? "Processing..." : "Submit Donation"}
+                {isPending ? "Processing..." : "Lanjut ke Pembayaran"}
               </Button>
             </div>
           </form>
