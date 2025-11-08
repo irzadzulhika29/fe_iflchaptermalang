@@ -32,6 +32,7 @@ const paymentMethods = [
 const Card = ({ campaignData }) => {
   return (
     <div className="grid grid-cols-1 gap-12 mt-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 place-items-center">
+      {console.log(campaignData)}
       {campaignData?.map((item, index) => {
         const percentDonation = Math.round(
           (item?.total_collected / item?.target_donation) * 100
