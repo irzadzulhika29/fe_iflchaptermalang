@@ -29,11 +29,11 @@ const SingleDonationPage = () => {
 
   const safeData = {
     dataCampaign: dataCampaign || {},
-    donaturData: dataCampaign?.donaturData || [],
-    donatorsCount: donationData?.donations?.length || 0
+    donaturData: dataCampaign?.dataCampaign?.donation_summary || [],
+    donatorsCount: dataCampaign?.dataCampaign?.donors || 0
   };
 
-  console.log('🔍 Safe Data:', safeData);
+  console.log('🔍 Safe Data:', safeData || []);
 
   return (
     <div className="inner_body">

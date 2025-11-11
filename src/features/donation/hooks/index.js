@@ -7,7 +7,7 @@ export const getDonationByCampaignSlug = async (campaignSlug) => {
       console.log('API Response:', response);
       return {
         campaign: response.data?.campaign || null,
-        // donations: response.data?.data?.donations || []
+        donations: response.data?.data?.donations || []
       };
     })
     .catch((error) => {

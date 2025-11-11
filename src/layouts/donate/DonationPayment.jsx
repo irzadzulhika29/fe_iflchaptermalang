@@ -22,6 +22,9 @@ const QRISDisplay = ({ campaignTitle }) => {
       return qrisCloseTheGap;
     }
     
+    else {
+      return qrisCloseTheGap;
+    }
   };
 
   const qrisImage = getQRISImage();
@@ -34,13 +37,13 @@ const QRISDisplay = ({ campaignTitle }) => {
       <h3 className="text-lg font-semibold text-gray-800">Scan QRIS Code</h3>
       <div className="bg-white p-4 rounded-lg shadow-md">
         <img
-          src={qrisImage}
-          alt={`QRIS Code ${campaignName}`}
+            src={qrisImage}
+            alt={`QRIS Code ${campaignName || campaignTitle}`}
           className="w-80 h-80 object-contain"
         />
       </div>
       <p className="text-sm text-gray-600 text-center">
-        Scan kode QRIS di atas untuk donasi <strong>{campaignName}</strong>
+        Scan kode QRIS di atas untuk donasi <strong>{campaignTitle}</strong>
       </p>
       <p className="text-xs text-gray-500 text-center">
         Gunakan aplikasi mobile banking atau e-wallet Anda
@@ -208,6 +211,7 @@ const DonationPayment = ({
         ...prev,
         name: "Hamba Allah",
         email: "hambaallah@gmail.com",
+        phone: "000000000000",
       }));
       setError(prev => ({
         ...prev,
@@ -222,20 +226,6 @@ const DonationPayment = ({
       }));
     }
   };
-
-  // useEffect(() => {
-  //   const fetchQRIS = async () => {
-  //     if (dataCampaign.dataCampaign?.id) {
-  //       try {
-  //         const response = await API.get(`/campaign/${dataCampaign.dataCampaign.id}`);
-  //         setQrisUrl(response.data?.qris_url || "");
-  //       } catch (error) {
-  //         console.error("Error fetching QRIS", error);
-  //       }
-  //     }
-  //   };
-  //   fetchQRIS();
-  // }, [dataCampaign]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -288,13 +278,11 @@ const DonationPayment = ({
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    // Validasi bukti transfer
     if (!proofFile) {
       setError((prev) => ({ ...prev, proof: true }));
       return;
     }
 
-    // Set loading state
     setIsSubmitting(true);
 
     const formData = new FormData();
@@ -309,10 +297,8 @@ const DonationPayment = ({
 
     try {
       await addDonationWithQRIS(formData);
-      // Success akan di-handle oleh addDonationWithQRIS (redirect)
     } catch (error) {
       console.error("Error processing donation", error);
-      // Reset loading state jika error
       setIsSubmitting(false);
     }
   };
@@ -331,13 +317,13 @@ const DonationPayment = ({
         <ReturnButton />
 
         <div className="flex flex-col items-start gap-4 md:flex-row md:gap-8">
-          <BorderedImage src={dataCampaign.dataCampaign.image} alt={dataCampaign.dataCampaign.title} />
+          <BorderedImage src={dataCampaign.dataCampaign.campaign.image} alt={dataCampaign.dataCampaign.campaign.title} />
           <div className="flex-grow">
             <h1 className="text-lg font-bold text-gray-800 sm:text-xl md:text-2xl">
               Our hands extended in kindness could reach millions of hearts!
             </h1>
             <div className="flex gap-2 my-2">
-              {dataCampaign.dataCampaign.categories?.map((category, index) => (
+              {dataCampaign.dataCampaign.campaign.categories?.map((category, index) => (
                 <span
                   key={index}
                   className={`${{
@@ -353,8 +339,8 @@ const DonationPayment = ({
               ))}
             </div>
             <p className="text-sm text-gray-600 sm:text-base">
-              You're donating to <strong>{dataCampaign.dataCampaign.title}</strong>. The
-              fund will benefit <strong>{dataCampaign.dataCampaign.receiver}</strong>.
+              You're donating to <strong>{dataCampaign.dataCampaign.campaign.title}</strong>. The
+              fund will benefit <strong>{dataCampaign.dataCampaign.campaign.receiver}</strong>.
             </p>
           </div>
         </div>
@@ -487,7 +473,7 @@ const DonationPayment = ({
               </div>
             </div>
 
-            <QRISDisplay campaignTitle={dataCampaign.dataCampaign.title} />
+            <QRISDisplay campaignTitle={dataCampaign.dataCampaign.campaign.title} />
 
             <hr className="border-gray-300 my-5" />
 

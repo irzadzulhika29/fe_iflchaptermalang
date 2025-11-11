@@ -82,7 +82,7 @@ const Card = ({ campaignData }) => {
               <ProgressBar
                 progress={percentDonation}
                 target_donation={item?.target_donation}
-                current_donation={item?.current_donation}
+                current_donation={item?.total_collected}
               />
             </div>
 
