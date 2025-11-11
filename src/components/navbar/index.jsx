@@ -24,11 +24,12 @@ const navList = [
   { title: "Article", path: "/artikel" },
   { title: "Catalog", path: "/#shop" },
   { title: "Donate", path: "/donasi" },
+  { title: "Proposal", path: "/proposal" },
 ];
 
 const AboutUsDropdown = () => {
   const location = useLocation();
-  const isActive = aboutUsList.some(item => location.pathname === item.path);
+  const isActive = aboutUsList.some((item) => location.pathname === item.path);
 
   return (
     <li className="relative group">
@@ -38,8 +39,11 @@ const AboutUsDropdown = () => {
           size={16}
           className="mt-1 transition-all group-hover:rotate-180"
         />
-        <span className={`absolute bottom-0 left-0 h-[2px] bg-white transition-all duration-300 ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
-          }`}></span>
+        <span
+          className={`absolute bottom-0 left-0 h-[2px] bg-white transition-all duration-300 ${
+            isActive ? "w-full" : "w-0 group-hover:w-full"
+          }`}
+        ></span>
       </Button>
       <div className="dropdown_content rounded-xl overflow-hidden shadow-lg">
         <i className="absolute w-4 h-4 rotate-45 -translate-x-1/2 -top-1 left-1/2 bg-light-1"></i>
@@ -54,8 +58,9 @@ const AboutUsDropdown = () => {
             <Button
               intent="outline"
               size="small"
-              className={`!w-full !rounded-xl !px-6 ${index === 0 ? "rounded-t-lg" : ""
-                } ${index === aboutUsList.length - 1 ? "rounded-b-lg" : ""}`}
+              className={`!w-full !rounded-xl !px-6 ${
+                index === 0 ? "rounded-t-lg" : ""
+              } ${index === aboutUsList.length - 1 ? "rounded-b-lg" : ""}`}
             >
               {item.title}
             </Button>
@@ -131,7 +136,11 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="navbar" ref={navbarRef} style={{ backgroundColor: "#00B4D8" }}>
+    <nav
+      className="navbar"
+      ref={navbarRef}
+      style={{ backgroundColor: "#00B4D8" }}
+    >
       <menu className="navbar_child">
         <Link
           to="/"
@@ -149,15 +158,15 @@ const Navbar = () => {
           {openNav ? <X size={36} /> : <List size={36} />}
         </Button>
 
-        <ul className={`navbar_field ${openNav ? "left-0" : "left-[-200%]"}`} style={{ backgroundColor: "#00B4D8" }}>
+        <ul
+          className={`navbar_field ${openNav ? "left-0" : "left-[-200%]"}`}
+          style={{ backgroundColor: "#00B4D8" }}
+        >
           <AboutUsDropdown />
           {navList.map((item, index) => {
             const isActive = location.pathname === item.path;
             return (
-              <li
-                key={index}
-                className="relative group"
-              >
+              <li key={index} className="relative group">
                 <Links
                   to={item.path}
                   onClick={() => setOpenNav(false)}
@@ -166,8 +175,11 @@ const Navbar = () => {
                   className="relative inline-block"
                 >
                   {item.title}
-                  <span className={`absolute bottom-0 left-0 h-[2px] bg-white transition-all duration-300 ease-out ${isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                    }`}></span>
+                  <span
+                    className={`absolute bottom-0 left-0 h-[2px] bg-white transition-all duration-300 ease-out ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                  ></span>
                 </Links>
               </li>
             );
