@@ -44,11 +44,11 @@ const getDaysRemaining = (endDate) => {
   return differenceInDays > 0 ? differenceInDays : 0; // Jika selisih negatif, kembalikan 0
 };
 
-const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0 }) => {
+const SingleDonation = ({ dataCampaign = {}, donatorsCount = 0 }) => {
   const navigate = useNavigate();
 
-  const campaign = dataCampaign.dataCampaign.campaign || dataCampaign || {};
-  const safeDonaturData = Array.isArray(dataCampaign.dataCampaign?.donors) ? dataCampaign.dataCampaign?.donors : [];
+  const campaign = dataCampaign.dataCampaign || dataCampaign || {};
+  const safeDonaturData = Array.isArray(dataCampaign.donaturData) ? dataCampaign.donaturData : [];
 
   const filteredDonors = safeDonaturData;
   const filteredPrayers = safeDonaturData.filter(
@@ -65,7 +65,7 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
     if (navigator.share) {
       try {
         await navigator.share({
-          title: campaign.campaign?.title || "Donation Campaign",
+          title: campaign || "Donation Campaign",
           text: "Check out this donation campaign!",
           url: window.location.href,
         });
@@ -94,14 +94,22 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
       </button>
 
       <div className="text-sm text-gray-500">
-        Published at: {new Date(dataCampaign.dataCampaign?.campaign?.publish_date).toLocaleString()}
+        Published at: {new Date(campaign.publish_date).toLocaleDateString('id-ID', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })}, {new Date(campaign.publish_date).toLocaleTimeString('id-ID', {
+          hour: '2-digit',
+          minute: '2-digit'
+        })}
       </div>
 
       <div className="relative w-full">
         <Image
-          src={dataCampaign.dataCampaign?.campaign?.image || "" || "https://via.placeholder.com/150"}
+          src={campaign.image || "" || "https://via.placeholder.com/150"}
           className="w-full rounded-xl"
-          description={dataCampaign.dataCampaign?.campaign?.title}
+          description={campaign.title}
         />
         <div className="absolute bottom-0 left-0 w-32 h-32 border-b-8 border-l-8 border-primary-1 rounded-bl-3xl"></div>
         <div className="absolute top-0 right-0 w-32 h-32 border-t-8 border-r-8 border-primary-1 rounded-tr-3xl"></div>
@@ -127,11 +135,11 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
       </div>
 
       <h1 className="text-2xl font-bold">
-        {dataCampaign.dataCampaign?.campaign?.title || "Campaign Title"}
+        {campaign.title || "Campaign Title"}
       </h1>
 
       <div className="flex flex-wrap gap-2 mt-2">
-        {dataCampaign.dataCampaign?.campaign?.categories?.map((cat, index) => {
+        {campaign.categories?.map((cat, index) => {
           let bgColor = "";
           let textColor = "";
 
@@ -169,36 +177,36 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
         <div className="text-lg font-medium">Donation Collected</div>
         <div className="flex items-center text-lg font-semibold">
           <span className="text-primary-1">
-            Rp {formatCurrency(dataCampaign.dataCampaign?.donation_summary?.total_collected)}
+            Rp {formatCurrency(campaign.current_donation)}
           </span>
           <span className="text-gray-500 ml-2">from target</span>
           <span className="text-gray-900 ml-2">
-            Rp {formatCurrency(dataCampaign.dataCampaign?.campaign?.target_donation)}
+            Rp {formatCurrency(campaign.target_donation)}
           </span>
         </div>
 
         <ProgressBar2
-          current_donation={dataCampaign.dataCampaign?.donation_summary?.total_collected}
-          target_donation={dataCampaign.dataCampaign?.campaign?.target_donation}
+          current_donation={campaign.current_donation}
+          target_donation={campaign.target_donation}
           className="h-2"
         />
 
         <div className="flex justify-between text-sm text-gray-400 mt-2">
           <p>
             <strong className="text-primary-1">
-              {dataCampaign.dataCampaign?.donation_summary?.donor_count || 0}
+              {safeDonaturData.length || 0}
             </strong> Donators
           </p>
           <p>
             <strong className="text-primary-1">
-              {getDaysRemaining(dataCampaign.dataCampaign?.campaign?.end_date)}
+              {getDaysRemaining(campaign.end_date)}
             </strong>{" "}
             days left
           </p>
         </div>
 
         <Link
-          to={`/donasi/${dataCampaign.dataCampaign?.campaign?.slug}/pembayaran`}
+          to={`/donasi/${campaign.slug}/pembayaran`}
           className={`mt-4 justify-center flex ${isCampaignClosed ? "pointer-events-none opacity-50" : ""
             }`}
           aria-label="navigate-payment-donate"
@@ -219,7 +227,7 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
       <div className="space-y-6">
         <h2 className="text-xl font-bold">Information</h2>
         <DonationTimeline
-          openDate={new Date(dataCampaign.dataCampaign?.campaign?.publish_date).toLocaleDateString(
+          openDate={new Date(campaign.publish_date).toLocaleDateString(
             "en-GB",
             {
               day: "numeric",
@@ -227,7 +235,7 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
               year: "numeric",
             }
           )}
-          closedDate={new Date(dataCampaign.dataCampaign?.campaign?.end_date).toLocaleDateString(
+          closedDate={new Date(campaign.end_date).toLocaleDateString(
             "en-GB",
             {
               day: "numeric",
@@ -236,18 +244,18 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
             }
           )}
           distributedDate={new Date(
-            dataCampaign.dataCampaign?.campaign?.distributed_date
+            campaign.distributed_date
           ).toLocaleDateString("en-GB", {
             day: "numeric",
             month: "long",
             year: "numeric",
-          })}
+          }) || "TBA"}
         />
         <div className="p-4 bg-yellow-100 text-orange-600 rounded-lg flex items-center space-x-2">
           <WarningCircle size={24} weight="bold" className="text-orange-600" />
           <p className="text-sm">
             This Campaign is still open for donation until{" "}
-            {new Date(dataCampaign.dataCampaign?.campaign?.end_date).toLocaleDateString("en-GB", {
+            {new Date(campaign.end_date).toLocaleDateString("en-GB", {
               day: "numeric",
               month: "long",
               year: "numeric",
@@ -261,7 +269,7 @@ const SingleDonation = ({ dataCampaign = {}, donaturData = [], donatorsCount = 0
       <div className="space-y-4">
         <h2 className="text-xl font-bold">Background Story</h2>
         <p className="text-sm text-gray-600 leading-relaxed">
-          {dataCampaign.dataCampaign?.campaign?.body || ""}
+          {campaign.body || ""}
         </p>
       </div>
 

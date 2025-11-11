@@ -22,14 +22,14 @@ const SingleDonationPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!campaignLoading && !dataCampaign) navigate("/404");
+    if (!campaignLoading && !dataCampaign.dataCampaign) navigate("/");
   }, [navigate, dataCampaign, campaignLoading]);
 
   const isLoading = campaignLoading || donationLoading;
 
   const safeData = {
     dataCampaign: dataCampaign || {},
-    donaturData: donationData?.donations || [],
+    donaturData: dataCampaign?.donaturData || [],
     donatorsCount: donationData?.donations?.length || 0
   };
 

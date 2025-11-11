@@ -21,7 +21,6 @@ const categories = [
 
 const sortOptions = [{ label: "Newest" }, { label: "Most Donated" }];
 
-// Payment methods
 const paymentMethods = [
   { name: "Qris", image: qrisIcon },
   { name: "OVO", image: ovoIcon },
@@ -38,13 +37,25 @@ const Card = ({ campaignData }) => {
           (item?.total_collected / item?.target_donation) * 100
         );
         return (
-          <article key={index} className="card !rounded-2xl">
-            <Image
-              isLazy
-              src={item?.image}
-              className="w-full rounded-lg aspect-video"
-              description={item?.title}
-            />
+          <article key={index} className="card group !rounded-2xl">
+            <div className="relative overflow-hidden rounded-lg -mx-4 -mt-4 mb-2">
+              <Image
+                isLazy
+                src={item?.image}
+                className="w-full group-hover:scale-110 transition-transform duration-500 ease-out aspect-video"
+                description={item?.title}
+              />
+
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                <h3 className="text-white font-bold text-xl mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                  {item?.title}
+                </h3>
+                <p className="text-white/90 text-sm line-clamp-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">
+                  {item?.description || "Bantu mereka yang membutuhkan dengan donasi Anda"}
+                </p>
+              </div>
+            </div>
+
             <div className="flex items-center justify-between gap-4">
               <div className="space-y-1">
                 <div className="flex gap-1">
@@ -55,7 +66,7 @@ const Card = ({ campaignData }) => {
                     >
                       {category}
                       {item?.categories?.length > 1 &&
-                      categoryId < item.categories.length - 1
+                        categoryId < item.categories.length - 1
                         ? ","
                         : ""}
                     </p>
@@ -66,13 +77,15 @@ const Card = ({ campaignData }) => {
                 </h3>
               </div>
             </div>
+
             <div className="relative flex items-center w-full gap-2">
               <ProgressBar
                 progress={percentDonation}
                 target_donation={item?.target_donation}
-                current_donation={item?.total_collected}
+                current_donation={item?.current_donation}
               />
             </div>
+
             <Link
               className="mx-auto cursor-pointer w-max"
               aria-label="navigate-donate"
@@ -97,7 +110,7 @@ const Card = ({ campaignData }) => {
 const PaymentSection = () => {
   return (
     <section className="my-8 mx-4 md:mx-8 lg:mx-12 text-center">
-      <h2 className="text-2xl font-bold text-primary-1 mt-24 mb-16">
+      {/* <h2 className="text-2xl font-bold text-primary-1 mt-24 mb-16">
         Our Payment Method
       </h2>
       <div className="flex justify-center items-center">
@@ -115,7 +128,7 @@ const PaymentSection = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </section>
   );
 };
@@ -126,7 +139,6 @@ const DonateSection = ({ campaignData, isLoading }) => {
   const [selectedSort, setSelectedSort] = useState("");
   const [sortDropdownOpen, setSortDropdownOpen] = useState(false);
 
-  // Filter
   const filteredCampaigns = campaignData?.filter((campaign) => {
     if (!selectedCategory) {
       return true;
@@ -136,7 +148,6 @@ const DonateSection = ({ campaignData, isLoading }) => {
     );
   });
 
-  // Sort
   const sortedCampaigns = filteredCampaigns?.sort((a, b) => {
     if (selectedSort === "Newest") {
       return new Date(b.publish_date) - new Date(a.publish_date);
@@ -209,9 +220,8 @@ const DonateSection = ({ campaignData, isLoading }) => {
               {selectedCategory || "Kategori"}
             </span>
             <span
-              className={`ml-2 transform transition-transform duration-300 ${
-                categoryDropdownOpen ? "rotate-180" : "rotate-0"
-              }`}
+              className={`ml-2 transform transition-transform duration-300 ${categoryDropdownOpen ? "rotate-180" : "rotate-0"
+                }`}
             >
               ▲
             </span>
@@ -221,11 +231,10 @@ const DonateSection = ({ campaignData, isLoading }) => {
               {categories.map((category) => (
                 <li
                   key={category.label}
-                  className={`p-4 cursor-pointer text-center ${
-                    category.label === selectedCategory
-                      ? "bg-blue-500 text-white font-bold"
-                      : "text-gray-900"
-                  }`}
+                  className={`p-4 cursor-pointer text-center ${category.label === selectedCategory
+                    ? "bg-blue-500 text-white font-bold"
+                    : "text-gray-900"
+                    }`}
                   onClick={() => handleCategorySelect(category.label)}
                 >
                   {category.label}
@@ -242,9 +251,8 @@ const DonateSection = ({ campaignData, isLoading }) => {
           >
             <span className="w-full text-left">{selectedSort || "Sort"}</span>
             <span
-              className={`ml-2 transform transition-transform duration-300 ${
-                sortDropdownOpen ? "rotate-180" : "rotate-0"
-              }`}
+              className={`ml-2 transform transition-transform duration-300 ${sortDropdownOpen ? "rotate-180" : "rotate-0"
+                }`}
             >
               ▲
             </span>
@@ -254,11 +262,10 @@ const DonateSection = ({ campaignData, isLoading }) => {
               {sortOptions.map((option) => (
                 <li
                   key={option.label}
-                  className={`p-4 cursor-pointer text-center ${
-                    option.label === selectedSort
-                      ? "bg-primary-1 text-white font-bold"
-                      : "text-gray-900"
-                  }`}
+                  className={`p-4 cursor-pointer text-center ${option.label === selectedSort
+                    ? "bg-primary-1 text-white font-bold"
+                    : "text-gray-900"
+                    }`}
                   onClick={() => handleSortSelect(option.label)}
                 >
                   {option.label}
