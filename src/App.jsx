@@ -21,6 +21,7 @@ import {
   HrdPage,
   ComperPage,
   BismarPage,
+  ProposalPage,
 } from "./page/root";
 
 // dashboard page
@@ -33,9 +34,10 @@ import {
   DetailBlogPage,
   DonationHistory,
   CampaignPage,
-  EditBlogPage,
+  EditBlogPage,   
   SoonDashboardPage,
   UserPage,
+  ProposalManagementPage,
 } from "./page/dashboard";
 
 // authentication page
@@ -91,6 +93,7 @@ const App = () => {
         <Route path="/artikel" element={<RootBlogPage />} />
         <Route path="/artikel/:slug" element={<SingleBlogPage />} />
         <Route path="/donasi/:slug" element={<SingleDonationPage />} />
+        <Route path="/proposal" element={<ProposalPage />} />
         <Route
           path="/donasi/:slug/pembayaran"
           element={<PaymentDonationPage />}
@@ -108,6 +111,10 @@ const App = () => {
 
             <Route element={<ProtectedRoles allowedRoles={[ROLES.admin]} />}>
               <Route path="/admin/dashboard/user" element={<UserPage />} />
+              <Route 
+                path="/admin/dashboard/proposal" 
+                element={<ProposalManagementPage />} 
+              />
             </Route>
 
             <Route

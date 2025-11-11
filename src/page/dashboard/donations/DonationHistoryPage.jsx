@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { useParams } from "react-router-dom";
 
+import { useGetCampaignBySlug } from "../../../features/campaign";
 import { useGetDonationByCampaignSlug } from "../../../features/donation";
 
 import { Funnel } from "@phosphor-icons/react";
@@ -65,6 +66,7 @@ const Table = ({ data }) => {
   );
 };
 
+
 const DonationHistoryPage = () => {
   const [isPopoverOpen, setPopoverOpen] = useState(false);
   const [filteredStatus, setFilteredStatus] = useState("All");
@@ -75,21 +77,23 @@ const DonationHistoryPage = () => {
 
   const { data: dataDonation, isLoading } = useGetDonationByCampaignSlug(slug);
 
-  const filteredDonations = dataDonation?.donations?.filter((item) => {
+  const filteredDonations = dataDonation?.data?.donations?.filter((item) => {
     return item.status === filteredStatus;
   });
 
   const detail = (
     <p className="text-sm text-gray-500">
       Total Donation Amount:{" "}
-      <strong className="text-lg sm:text-xl text-primary-1">Rp. {formatCurrency(dataDonation?.campaign?.current_donation)}</strong>
+      <strong className="text-lg sm:text-xl text-primary-1">
+        Rp. {formatCurrency(dataDonation?.data?.campaign?.total_collected)}
+      </strong>
     </p>
   );
 
   const titleLoad = <div className="w-40 h-8 bg-gray-200 animate-pulse"></div>;
 
   return (
-    <Dashboard title={dataDonation?.campaign?.title || titleLoad} detail={detail}>
+    <Dashboard title={dataDonation?.data?.campaign?.title || titleLoad} detail={detail}>
       <div className="flex items-center h-full gap-4 mt-4 border border-gray-300 divide-x divide-gray-300 rounded-lg w-max">
         <span className="hidden py-2 pl-4 sm:block">
           <Funnel size={20} />
@@ -108,7 +112,9 @@ const DonationHistoryPage = () => {
       {isLoading ? (
         <Loading height={100} width={100} className="m-10" />
       ) : (
-        <Table data={filteredStatus === "All" ? dataDonation?.donations : filteredDonations} />
+        <Table 
+          data={filteredStatus === "All" ? dataDonation?.donations : filteredDonations} 
+        />
       )}
     </Dashboard>
   );

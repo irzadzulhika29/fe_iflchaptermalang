@@ -15,7 +15,7 @@ const DetailCampaignModal = ({ slug }) => {
   const [showModal, setShowModal] = useState(false);
 
   const { data: dataCampaign, isLoading } = useGetCampaignBySlug(slug);
-
+  console.log('dataCampaign', dataCampaign);
   const detailInfo = (key, value) => {
     return (
       <div className="flex text-sm font-medium text-dark-1">
@@ -40,19 +40,19 @@ const DetailCampaignModal = ({ slug }) => {
         ) : (
           <div className="w-full max-w-lg space-y-4 md:min-w-xl">
             <Image
-              src={dataCampaign?.image || "https://ik.imagekit.io/iflmalang/constant-image/project-iflta.webp"}
+              src={dataCampaign?.dataCampaign?.campaign?.image || "https://ik.imagekit.io/iflmalang/constant-image/project-iflta.webp"}
               className="mx-auto rounded-md aspect-video w-96"
-              description={dataCampaign?.title}
+              description={dataCampaign?.dataCampaign?.campaign?.title}
             />
             <div className="px-4 pb-8 space-y-2">
-              {detailInfo("Start Date", formatDate(dataCampaign?.publish_date) || "none")}
-              {detailInfo("End Date", formatDate(dataCampaign?.end_date) || "none")}
-              {detailInfo("Status", dataCampaign?.status || "none")}
-              {detailInfo("Current Donation", dataCampaign?.current_donation || "none")}
-              {detailInfo("Target Donation", dataCampaign?.target_donation || "none")}
-              {detailInfo("Note", dataCampaign?.note || "none")}
-              {detailInfo("Description", dataCampaign?.short_description || "none")}
-              {detailInfo("Background Story", dataCampaign?.body || "none")}
+              {detailInfo("Start Date", formatDate(dataCampaign?.dataCampaign?.campaign?.publish_date) || "none")}
+              {detailInfo("End Date", formatDate(dataCampaign?.dataCampaign?.campaign?.end_date) || "none")}
+              {detailInfo("Status", dataCampaign?.dataCampaign.campaign.status || "none")}
+              {detailInfo("Current Donation", dataCampaign?.dataCampaign?.campaign?.total_collected || "none")}
+              {detailInfo("Target Donation", dataCampaign?.dataCampaign?.campaign?.target_donation || "none")}
+              {detailInfo("Note", dataCampaign?.dataCampaign?.campaign?.note || "none")}
+              {detailInfo("Description", dataCampaign?.dataCampaign?.campaign?.short_description || "none")}
+              {detailInfo("Background Story", dataCampaign?.dataCampaign?.campaign?.body || "none")}
             </div>
           </div>
         )}

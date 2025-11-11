@@ -22,18 +22,18 @@ const SingleDonationPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!campaignLoading && !dataCampaign) navigate("/404");
+    if (!campaignLoading && !dataCampaign.dataCampaign) navigate("/");
   }, [navigate, dataCampaign, campaignLoading]);
 
   const isLoading = campaignLoading || donationLoading;
 
   const safeData = {
     dataCampaign: dataCampaign || {},
-    donaturData: donationData?.donations || [],
-    donatorsCount: donationData?.donations?.length || 0
+    donaturData: dataCampaign?.dataCampaign?.donation_summary || [],
+    donatorsCount: dataCampaign?.dataCampaign?.donors || 0
   };
 
-  console.log('🔍 Safe Data:', safeData);
+  console.log('🔍 Safe Data:', safeData || []);
 
   return (
     <div className="inner_body">

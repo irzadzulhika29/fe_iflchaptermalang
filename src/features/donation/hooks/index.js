@@ -4,9 +4,9 @@ import SweatAlert from "../../../utils/sweet-alert";
 export const getDonationByCampaignSlug = async (campaignSlug) => {
   return await API.get(`/campaign/${campaignSlug}/donation`)
     .then((response) => {
-      console.log('API Response:', response.data);
+      console.log('API Response:', response);
       return {
-        campaign: response.data?.data?.campaign || null,
+        campaign: response.data?.campaign || null,
         donations: response.data?.data?.donations || []
       };
     })
