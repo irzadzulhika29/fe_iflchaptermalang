@@ -74,7 +74,7 @@ const DonationHistoryPage = () => {
   const status = [{ name: "unpaid" }, { name: "pending" }, { name: "paid" }, { name: "denied" }, { name: "expired" }, { name: "canceled" }];
 
   const { data: dataDonation, isLoading } = useGetDonationByCampaignSlug(slug);
-
+  console.log('dataDonation', dataDonation);
   const filteredDonations = dataDonation?.donations?.filter((item) => {
     return item.status === filteredStatus;
   });

@@ -15,7 +15,7 @@ const DetailCampaignModal = ({ slug }) => {
   const [showModal, setShowModal] = useState(false);
 
   const { data: dataCampaign, isLoading } = useGetCampaignBySlug(slug);
-
+  console.log('dataCampaign', dataCampaign);
   const detailInfo = (key, value) => {
     return (
       <div className="flex text-sm font-medium text-dark-1">
@@ -45,14 +45,14 @@ const DetailCampaignModal = ({ slug }) => {
               description={dataCampaign?.title}
             />
             <div className="px-4 pb-8 space-y-2">
-              {detailInfo("Start Date", formatDate(dataCampaign?.publish_date) || "none")}
-              {detailInfo("End Date", formatDate(dataCampaign?.end_date) || "none")}
-              {detailInfo("Status", dataCampaign?.status || "none")}
-              {detailInfo("Current Donation", dataCampaign?.current_donation || "none")}
-              {detailInfo("Target Donation", dataCampaign?.target_donation || "none")}
-              {detailInfo("Note", dataCampaign?.note || "none")}
-              {detailInfo("Description", dataCampaign?.short_description || "none")}
-              {detailInfo("Background Story", dataCampaign?.body || "none")}
+              {detailInfo("Start Date", formatDate(dataCampaign?.dataCampaign?.publish_date) || "none")}
+              {detailInfo("End Date", formatDate(dataCampaign?.dataCampaign?.end_date) || "none")}
+              {detailInfo("Status", dataCampaign?.dataCampaign.status || "none")}
+              {detailInfo("Current Donation", dataCampaign?.dataCampaign?.current_donation || "none")}
+              {detailInfo("Target Donation", dataCampaign?.dataCampaign?.target_donation || "none")}
+              {detailInfo("Note", dataCampaign?.dataCampaign?.note || "none")}
+              {detailInfo("Description", dataCampaign?.dataCampaign?.short_description || "none")}
+              {detailInfo("Background Story", dataCampaign?.dataCampaign?.body || "none")}
             </div>
           </div>
         )}
