@@ -41,14 +41,14 @@ const getDaysRemaining = (endDate) => {
   const end = new Date(endDate);
   const differenceInTime = end - today;
   const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-  return differenceInDays > 0 ? differenceInDays : 0; // Jika selisih negatif, kembalikan 0
+  return differenceInDays > 0 ? differenceInDays : 0;
 };
 
 const SingleDonation = ({ dataCampaign = {}, donatorsCount = 0 }) => {
   const navigate = useNavigate();
 
-  const campaign = dataCampaign.dataCampaign || dataCampaign || {};
-  const safeDonaturData = Array.isArray(dataCampaign.donaturData) ? dataCampaign.donaturData : [];
+  const campaign = dataCampaign.dataCampaign.campaign || dataCampaign || {};
+  const safeDonaturData = Array.isArray(dataCampaign.dataCampaign?.donors) ? dataCampaign.dataCampaign.donors : [];
 
   const filteredDonors = safeDonaturData;
   const filteredPrayers = safeDonaturData.filter(
@@ -177,7 +177,7 @@ const SingleDonation = ({ dataCampaign = {}, donatorsCount = 0 }) => {
         <div className="text-lg font-medium">Donation Collected</div>
         <div className="flex items-center text-lg font-semibold">
           <span className="text-primary-1">
-            Rp {formatCurrency(campaign.current_donation)}
+            Rp {formatCurrency(campaign.total_collected)}
           </span>
           <span className="text-gray-500 ml-2">from target</span>
           <span className="text-gray-900 ml-2">
@@ -186,7 +186,7 @@ const SingleDonation = ({ dataCampaign = {}, donatorsCount = 0 }) => {
         </div>
 
         <ProgressBar2
-          current_donation={campaign.current_donation}
+          current_donation={campaign.total_collected}
           target_donation={campaign.target_donation}
           className="h-2"
         />
@@ -243,13 +243,15 @@ const SingleDonation = ({ dataCampaign = {}, donatorsCount = 0 }) => {
               year: "numeric",
             }
           )}
-          distributedDate={new Date(
+          distributedDate={
             campaign.distributed_date
-          ).toLocaleDateString("en-GB", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          }) || "TBA"}
+              ? new Date(campaign.distributed_date).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })
+              : "TBA"
+          }
         />
         <div className="p-4 bg-yellow-100 text-orange-600 rounded-lg flex items-center space-x-2">
           <WarningCircle size={24} weight="bold" className="text-orange-600" />

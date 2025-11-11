@@ -46,7 +46,7 @@ const CardDonation = ({ dataCampaigns, dataCategories, editCampaign, editPending
         <h1 className="w-full m-8 text-3xl font-semibold text-center text-gray-400">The campaigns is not found</h1>
       ) : (
         dataCampaigns?.map((item, index) => {
-          const percentDonation = Math.round((item?.current_donation / item?.target_donation) * 100);
+          const percentDonation = Math.round((item?.total_collected / item?.target_donation) * 100);
           return (
             <article key={index} className="card max-w-300 !rounded-2xl">
               <React.Suspense fallback={ImageSkeleton}>
@@ -67,7 +67,7 @@ const CardDonation = ({ dataCampaigns, dataCategories, editCampaign, editPending
               </div>
               <p className="text-sm line-clamp-3">{item?.short_description}</p>
               <div className="relative flex items-center w-full gap-2 pb-4">
-                <ProgressBar progress={percentDonation} target_donation={item?.target_donation} current_donation={item?.current_donation} />
+                <ProgressBar current_donation={item?.total_collected} target_donation={item?.target_donation} />
               </div>
               <div className="relative flex">
                 <EditCampaignModal

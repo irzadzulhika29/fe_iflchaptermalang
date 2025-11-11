@@ -347,7 +347,7 @@ export default function Chatbot() {
                 async ([key, fileData]) => {
                     const formData = new FormData();
                     formData.append("file", fileData.file);
-                    formData.append("type", key); // followProof, shareProof, paymentProof
+                    formData.append("type", key);
 
                     const response = await fetch("/api/upload", {
                         method: "POST",
@@ -355,7 +355,7 @@ export default function Chatbot() {
                     });
 
                     const data = await response.json();
-                    return { key, url: data.url }; // Return URL hasil upload
+                    return { key, url: data.url };
                 }
             );
 

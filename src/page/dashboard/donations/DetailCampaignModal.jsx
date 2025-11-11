@@ -40,19 +40,19 @@ const DetailCampaignModal = ({ slug }) => {
         ) : (
           <div className="w-full max-w-lg space-y-4 md:min-w-xl">
             <Image
-              src={dataCampaign?.image || "https://ik.imagekit.io/iflmalang/constant-image/project-iflta.webp"}
+              src={dataCampaign?.dataCampaign?.campaign?.image || "https://ik.imagekit.io/iflmalang/constant-image/project-iflta.webp"}
               className="mx-auto rounded-md aspect-video w-96"
-              description={dataCampaign?.title}
+              description={dataCampaign?.dataCampaign?.campaign?.title}
             />
             <div className="px-4 pb-8 space-y-2">
-              {detailInfo("Start Date", formatDate(dataCampaign?.dataCampaign?.publish_date) || "none")}
-              {detailInfo("End Date", formatDate(dataCampaign?.dataCampaign?.end_date) || "none")}
-              {detailInfo("Status", dataCampaign?.dataCampaign.status || "none")}
-              {detailInfo("Current Donation", dataCampaign?.dataCampaign?.current_donation || "none")}
-              {detailInfo("Target Donation", dataCampaign?.dataCampaign?.target_donation || "none")}
-              {detailInfo("Note", dataCampaign?.dataCampaign?.note || "none")}
-              {detailInfo("Description", dataCampaign?.dataCampaign?.short_description || "none")}
-              {detailInfo("Background Story", dataCampaign?.dataCampaign?.body || "none")}
+              {detailInfo("Start Date", formatDate(dataCampaign?.dataCampaign?.campaign?.publish_date) || "none")}
+              {detailInfo("End Date", formatDate(dataCampaign?.dataCampaign?.campaign?.end_date) || "none")}
+              {detailInfo("Status", dataCampaign?.dataCampaign.campaign.status || "none")}
+              {detailInfo("Current Donation", dataCampaign?.dataCampaign?.campaign?.total_collected || "none")}
+              {detailInfo("Target Donation", dataCampaign?.dataCampaign?.campaign?.target_donation || "none")}
+              {detailInfo("Note", dataCampaign?.dataCampaign?.campaign?.note || "none")}
+              {detailInfo("Description", dataCampaign?.dataCampaign?.campaign?.short_description || "none")}
+              {detailInfo("Background Story", dataCampaign?.dataCampaign?.campaign?.body || "none")}
             </div>
           </div>
         )}

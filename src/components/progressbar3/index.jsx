@@ -25,4 +25,3 @@ const ProgressBar3 = ({ className, current_donation, target_donation }) => {
 };
 
 export default ProgressBar3;
-//1
