@@ -16,6 +16,7 @@ import ProjectPage from "./ProjectPage";
 import SingleBlogPage from "./SingleBlogPage";
 import SingleDonationPage from "./SingleDonationPage";
 import EventPage from "./EventPage";
+import ProposalPage from "./ProposalPage";
 
 export {
   EventPage,
@@ -36,4 +37,5 @@ export {
   ProfilePage,
   ProjectPage,
   SingleBlogPage,
+  ProposalPage,
 };
