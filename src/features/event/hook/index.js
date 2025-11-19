@@ -55,3 +55,22 @@ export const editEventByAdmin = async ({ eventId, body }) => {
         throw error;
       });
   };
+
+export const deleteEventByAdmin = async (eventId) => {
+  return await API.delete(`/event/${eventId}`)
+    .then((response) => {
+      SweatAlert(
+        response.data?.message || "Event berhasil dihapus!",
+        "success"
+      );
+      reloadPage(2200);
+      return response.data?.data;
+    })
+    .catch((error) => {
+      SweatAlert(
+        error.response?.data?.message || "Gagal menghapus event",
+        "error"
+      );
+      throw error;
+    });
+};
