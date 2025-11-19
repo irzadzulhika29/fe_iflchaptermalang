@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { volunteerAPI } from "../api";
 
 export const useGetAllVolunteers = () => {
@@ -11,5 +11,17 @@ export const useGetAllVolunteers = () => {
 export const useRegisterVolunteer = () => {
   return useMutation({
     mutationFn: volunteerAPI.register,
+  });
+};
+
+export const useUpdateVolunteerStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: volunteerAPI.updateStatus,
+    onSuccess: () => {
+      // Invalidate and refetch volunteers list
+      queryClient.invalidateQueries({ queryKey: ["volunteers"] });
+    },
   });
 };
