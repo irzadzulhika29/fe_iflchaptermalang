@@ -33,7 +33,6 @@ const SingleDonationPage = () => {
     donatorsCount: dataCampaign?.dataCampaign?.donors || 0
   };
 
-  console.log('🔍 Safe Data:', safeData || []);
 
   return (
     <div className="inner_body">

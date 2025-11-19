@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query"; // ← TAMBAHKAN useMutation
-import { getAllSdg, getAllEvents, addEventByAdmin, editEventByAdmin } from "../hook";
+import { getAllSdg, getAllEvents, addEventByAdmin, editEventByAdmin, deleteEventByAdmin } from "../hook";
 
 export const useGetAllSdg = () => {
   return useQuery({
@@ -47,5 +47,11 @@ export const useEditEventByAdmin = () => {
     mutationFn: ({ eventId, body }) => {
       return editEventByAdmin({ eventId, body });
     },
+  });
+};
+
+export const useDeleteEventByAdmin = () => {
+  return useMutation({
+    mutationFn: deleteEventByAdmin,
   });
 };

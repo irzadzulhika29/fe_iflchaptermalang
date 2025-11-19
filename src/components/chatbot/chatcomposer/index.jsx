@@ -12,35 +12,29 @@ export default function ChatComposer({ value, onChange, onSend, placeholder, dis
   const isDisabled = disabled || isEmpty;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur border-t border-slate-200">
-      <div className="max-w-4xl mx-auto p-3">
-        <div className="flex items-center gap-2">
-          <input
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            onKeyDown={handleKey}
-            placeholder={placeholder}
-            disabled={disabled}
-            className={`flex-1 px-4 py-3 rounded-full border border-slate-500 bg-white outline-none focus:ring-2 focus:ring-cyan-500 transition ${
-              disabled ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          />
-          <button
-            onClick={!isDisabled ? onSend : undefined}
-            disabled={isDisabled}
-            className={`p-3 rounded-full transition-all duration-200 ${
-              isDisabled
-                ? "bg-slate-300 text-white cursor-not-allowed"
-                : "bg-cyan-500 hover:bg-cyan-600 text-white active:scale-[0.98]"
-            }`}
-          >
-            <Send
-              className={`transition-transform ${
-                isDisabled ? "opacity-60" : "opacity-100"
-              }`}
-            />
-          </button>
-        </div>
+    <div className="fixed bottom-0 left-0 right-0 border-t border-primary-1/10 bg-white/90 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-4xl items-center gap-3 px-4 py-4">
+        <input
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          onKeyDown={handleKey}
+          placeholder={placeholder}
+          disabled={disabled}
+          className={`flex-1 rounded-2xl border border-primary-1/20 bg-white px-5 py-3 text-sm text-dark-1 shadow-sm outline-none transition focus:border-primary-1 focus:ring-2 focus:ring-primary-1/30 ${
+            disabled ? "opacity-60 cursor-not-allowed" : ""
+          }`}
+        />
+        <button
+          onClick={!isDisabled ? onSend : undefined}
+          disabled={isDisabled}
+          className={`rounded-2xl px-4 py-3 text-white shadow-lg transition-all duration-200 active:scale-95 ${
+            isDisabled
+              ? "bg-primary-1/30 text-white/70 cursor-not-allowed"
+              : "bg-gradient-to-r from-primary-2 to-primary-1 hover:shadow-primary-1/40"
+          }`}
+        >
+          <Send className="h-5 w-5" />
+        </button>
       </div>
     </div>
   );

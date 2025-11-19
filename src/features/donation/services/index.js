@@ -5,7 +5,6 @@ export const useGetDonationByCampaignSlug = (campaignSlug) => {
   return useQuery({
     queryKey: ["getDonationByCampaignSlug", campaignSlug],
     queryFn: async () => {
-      console.log('Anjem', campaignSlug);
       const responseGetDonationByCampaignSlug = await getDonationByCampaignSlug(campaignSlug);
       return responseGetDonationByCampaignSlug || "";
     },
