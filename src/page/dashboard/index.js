@@ -14,6 +14,7 @@ import DonationHistory from "./donations/DonationHistoryPage";
 
 import ProposalManagementPage from "./proposal/ProposalPage";
 import SoonDashboardPage from "./SoonDashboardPage";
+import VolunteerPage from "./volunteers/VolunteerPage";
 
 export {
   BlogCategories,
@@ -28,4 +29,5 @@ export {
   CampaignPage,
   DonationHistory,
   ProposalManagementPage,
+  VolunteerPage,
 };

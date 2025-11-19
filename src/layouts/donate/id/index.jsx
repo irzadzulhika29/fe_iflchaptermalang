@@ -57,10 +57,6 @@ const SingleDonation = ({ dataCampaign = {}, donatorsCount = 0 }) => {
       prayer.donation_message.trim() !== ""
   );
 
-  console.log("campaign data:", campaign);
-  console.log("donatur data:", safeDonaturData);
-  console.log("donators count:", donatorsCount);
-
   const handleShare = async () => {
     if (navigator.share) {
       try {
