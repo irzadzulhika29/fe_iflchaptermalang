@@ -105,7 +105,7 @@ const EventCard = ({ event, onEdit, onDelete }) => {
 
         <div className="flex items-center gap-2 mb-2">
           <div className="flex items-center text-green-600 text-sm font-semibold">
-            <svg
+            {/* <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="none"
@@ -116,8 +116,8 @@ const EventCard = ({ event, onEdit, onDelete }) => {
               className="w-4 h-4"
             >
               <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-            </svg>
-            <span className="ml-1">
+            </svg> */}
+            <span >
               {event.price && Number(event.price) > 0
                 ? new Intl.NumberFormat("id-ID", {
                   style: "currency",
