@@ -125,7 +125,13 @@ const EventCard = ({ event, onEdit, onDelete }) => {
         </div>
 
         <div className="mt-3 text-xs text-gray-400">
-          Updated: {new Date(event.updated_at).toLocaleDateString('id-ID')}
+          Updated: {new Date(event.updated_at).toLocaleDateString('id-ID', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })}
         </div>
       </div>
     </div>
