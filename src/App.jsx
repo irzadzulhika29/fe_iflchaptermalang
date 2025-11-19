@@ -38,6 +38,7 @@ import {
   SoonDashboardPage,
   UserPage,
   ProposalManagementPage,
+  EventManagementPage
 } from "./page/dashboard";
 
 // authentication page
@@ -166,10 +167,21 @@ const App = () => {
                 element={<CampaignCategories />}
               />
               <Route
-                path="/admin/dashboard/donation/:slug"
+              path="/admin/dashboard/donation/:slug"
                 element={<DonationHistory />}
               />
             </Route>
+
+            <Route
+              element={
+                <ProtectedRoles allowedRoles={[ROLES.admin]} />
+              }
+            >
+              <Route path="/admin/dashboard/event" element={<EventManagementPage />} />
+            </Route>
+
+
+
           </Route>
         </Route>
 
