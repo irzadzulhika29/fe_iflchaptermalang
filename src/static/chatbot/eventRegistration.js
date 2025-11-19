@@ -40,8 +40,8 @@ export const programRegistrationFlow = (program) => [
     id: "ask_guidebook",
     type: "ask",
     key: "hasReadGuidebook",
-    label: "Sudah membaca GuideBook Volunteer We Care Them 2025",
-    text: "Sudah membaca GuideBook Volunteer We Care Them 2025?\n\nPilihan jawaban: SUDAH atau BELUM",
+    label: `Sudah membaca GuideBook Volunteer ${program?.title || "We Care Them 2025"}`,
+    text: `Sudah membaca GuideBook Volunteer ${program?.title || "We Care Them 2025"}?\n\nLink GuideBook: https://drive.google.com/drive/folders/1-o9i_eap7yb_GmjzEbTumHATz07neN8y?usp=sharing\n\nPilihan jawaban: SUDAH atau BELUM`,
     options: ["SUDAH", "BELUM"],
   },
 
@@ -67,8 +67,8 @@ export const programRegistrationFlow = (program) => [
     id: "ask_reason",
     type: "ask",
     key: "reason",
-    label: "Alasan ingin menjadi Volunteer We Care Them 2025",
-    text: "Apa alasan kamu ingin menjadi volunteer We Care Them 2025?",
+    label: `Alasan ingin menjadi Volunteer ${program?.title || "We Care Them 2025"}`,
+    text: `Apa alasan kamu ingin menjadi volunteer ${program?.title || "We Care Them 2025"}?`,
   },
 
   {
@@ -77,6 +77,16 @@ export const programRegistrationFlow = (program) => [
     key: "experience",
     label: "Pengalaman yang berhubungan dengan volunteer",
     text: "Boleh ceritakan pengalaman yang berhubungan dengan volunteer?",
+  },
+
+  {
+    id: "payment_info",
+    type: "ask",
+    key: "payment_status",
+    label: "Status Pembayaran",
+    text: "💰 Informasi Pembayaran\n\nSilakan lakukan pembayaran sesuai nominal dan metode di bawah ini.\n\nJika sudah transfer, silakan klik tombol SUDAH.",
+    options: ["SUDAH", "BELUM"],
+    showPayment: true,
   },
 
   {
@@ -109,5 +119,7 @@ export const programRegistrationFlow = (program) => [
     id: "hint_done",
     type: "bot",
     text: 'Datanya udah masuk semua. Ketik "udah" buat lihat rekap sebelum dikirim. 😉',
+    waitFor: "keyword",
+    keyword: ["udah"],
   },
 ];

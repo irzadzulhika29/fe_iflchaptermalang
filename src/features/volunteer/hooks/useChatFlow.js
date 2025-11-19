@@ -175,5 +175,7 @@ export const useChatFlow = (flow) => {
     handleQuickReply,
     handleEdit,
     pushBot,
+    flow,
+    flowIndex,
   };
 };

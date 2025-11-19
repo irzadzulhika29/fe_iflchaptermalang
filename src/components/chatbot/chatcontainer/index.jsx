@@ -22,6 +22,10 @@ export default function ChatContainer({
     onQuickReply,
     onConfirm,
     onEdit,
+    flow,
+    flowIndex,
+    finalPrice,
+    originalPrice,
 }) {
     const endRef = useRef(null);
 
@@ -56,6 +60,11 @@ export default function ChatContainer({
                         onQuickReply={onQuickReply}
                         onConfirm={onConfirm}
                         onEdit={onEdit}
+                        program={program}
+                        flow={flow}
+                        flowIndex={flowIndex}
+                        finalPrice={finalPrice}
+                        originalPrice={originalPrice}
                     />
                 </div>
             </div>
