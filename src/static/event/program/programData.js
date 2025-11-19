@@ -14,6 +14,9 @@ export const programsData = [
       "Melakukan Kegiatan Bersama Down Syndrome",
       "Berinteraksi dengan Down Syndrome",
     ],
+
+    status: "Open",
+    isOpenVolunteer: true,
   },
   {
     title: "Aku Pintar",
@@ -30,5 +33,8 @@ export const programsData = [
       "Games Seputar Literasi",
       "3 Pos Games (Puzzle Cerita, Teka-Teki Cerdas, Imajinasi Bebas)",
     ],
+
+    status: "Close",
+    isOpenVolunteer: true,
   },
 ];

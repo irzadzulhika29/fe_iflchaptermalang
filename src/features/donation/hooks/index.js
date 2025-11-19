@@ -69,7 +69,7 @@ export const createMidtransTransaction = async (body) => {
     name: body.name,
     email: body.email,
     phone: body.phone,
-    donation_amount: parseInt(body.donation_amount), // Pastikan integer
+    donation_amount: parseInt(body.donation_amount),
     donation_message: body.donation_message || "",
     anonymous: body.is_anonymous || false,
   };
