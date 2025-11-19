@@ -11,4 +11,11 @@ export const volunteerAPI = {
         const response = await API.post("/volunteer/registration", payload);
         return response.data;
     },
+
+    updateStatus: async ({ id, status }) => {
+        const response = await API.patch(`/admin/volunteer-registrations/${id}/status`, {
+            status
+        });
+        return response.data;
+    },
 };
