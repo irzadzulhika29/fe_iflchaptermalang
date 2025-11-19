@@ -1,7 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 
 export default function ChatHeader({ program, onBack }) {
-  // Helper function untuk mendapatkan SDG numbers
   const getSDGNumbers = () => {
     if (program.sdgs && Array.isArray(program.sdgs) && program.sdgs.length > 0) {
       return program.sdgs.map(sdg => sdg.code.replace('SDG', '')).join(', ');
@@ -9,7 +8,6 @@ export default function ChatHeader({ program, onBack }) {
     return program.sdgNumber || '-';
   };
 
-  // Helper function untuk mendapatkan gambar
   const getImage = () => {
     return program.event_photo || program.image || 'https://via.placeholder.com/400x300';
   };
@@ -21,17 +19,14 @@ export default function ChatHeader({ program, onBack }) {
     if (!dateString) return '—';
     
     try {
-      // Parse date
       const date = new Date(dateString);
       
-      // Format: DD/MM/YYYY
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0');
       const year = date.getFullYear();
       
       return `${day}/${month}/${year}`;
     } catch (error) {
-      // If parsing fails, return original string
       return dateString;
     }
   };

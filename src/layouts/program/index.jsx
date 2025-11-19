@@ -210,7 +210,6 @@ const ProgramSection = () => {
     },
   ];
 
-  // Program data matching the images
   const programs = [
     {
       title: "We Care Them",

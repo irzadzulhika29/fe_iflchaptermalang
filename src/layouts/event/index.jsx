@@ -3,7 +3,7 @@ import { headerSlidesProgram, headerSlidesProject } from "../../static/event/eve
 import ProgramList from "../../components/programlist";
 import ProjectList from "../../components/projectlist";
 import TabButton from "../../components/tabbutton";
-import { useGetAllEvents } from "../../features/event"; // ← TAMBAHKAN
+import { useGetAllEvents } from "../../features/event";
 
 const TABS = { PROGRAM: 0, PROJECT: 1 };
 
@@ -11,10 +11,8 @@ const EventSection = () => {
     const [activeTab, setActiveTab] = useState(TABS.PROGRAM);
     const [activeSlide, setActiveSlide] = useState(0);
 
-    // ========== GET DATA FROM API ==========
     const { data: eventsFromApi, isLoading } = useGetAllEvents();
     
-    // Filter by category
     const programEvents = eventsFromApi?.filter(
         event => event.category?.toLowerCase() === 'program'
     ) || [];
@@ -22,7 +20,6 @@ const EventSection = () => {
     const projectEvents = eventsFromApi?.filter(
         event => event.category?.toLowerCase() === 'project'
     ) || [];
-    // ========================================
 
     const isPausedRef = useRef(false);
     const reducedMotion = useMemo(() => {
@@ -130,7 +127,6 @@ const EventSection = () => {
                     </div>
                 </div>
 
-                {/* Loading State */}
                 {isLoading && (
                     <div className="text-center py-12">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
@@ -138,7 +134,6 @@ const EventSection = () => {
                     </div>
                 )}
 
-                {/* Event Lists */}
                 {!isLoading && (
                     <div className="mb-10 sm:mb-16 md:mb-20">
                         {activeTab === TABS.PROGRAM ? (

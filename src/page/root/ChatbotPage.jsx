@@ -7,10 +7,6 @@ const ChatbotPage = () => {
     const { state } = useLocation();
     const program = state?.program;
     
-    // Sekarang bisa akses data event
-    console.log('Event Name:', program?.title);
-    console.log('Event Slug:', program?.slug);
-    
     return (
         <div className="inner_body">
             <HelmetLayout

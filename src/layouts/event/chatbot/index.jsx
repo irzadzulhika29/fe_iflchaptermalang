@@ -1,6 +1,5 @@
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
-// import { programsData } from "../../../static/event/program/programData";
 import TypingDots from "../../../components/chatbot/typingdots";
 import ChatHeader from "../../../components/chatbot/chatheader";
 import ChatComposer from "../../../components/chatbot/chatcomposer";
