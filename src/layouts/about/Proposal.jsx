@@ -2,7 +2,6 @@ import React from 'react'
 import Container from '../../components/container'
 import { Button } from '../../components/button'
 
-// Data dummy untuk proposal - nanti bisa diganti dengan API call
 const proposalData = [
   {
     id: 1,
@@ -35,7 +34,6 @@ const proposalData = [
 
 const Proposal = () => {
   const handleDownload = (pdfUrl, namaProgram) => {
-    // Fungsi untuk download PDF
     const link = document.createElement('a')
     link.href = pdfUrl
     link.download = `${namaProgram}.pdf`
@@ -47,7 +45,7 @@ const Proposal = () => {
   return (
     <Container className="!my-12">
       <div className="space-y-8">
-        {/* Header Section */}
+        {/* Header Section untuk judul dan deskripsi */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold text-primary-1">
             Proposal Program & Kegiatan
@@ -58,7 +56,7 @@ const Proposal = () => {
           </p>
         </div>
 
-        {/* Table Section */}
+        {/* Table Section untuk daftar program dan project proposal */}
         <div className="relative overflow-x-auto border rounded-lg shadow-md">
           <table className="w-full text-sm text-left rtl:text-right text-dark-1">
             <thead className="uppercase text-white bg-[#00b4d8]">
@@ -117,7 +115,6 @@ const Proposal = () => {
           </table>
         </div>
 
-        {/* Info Section */}
         <div className="text-center text-sm text-gray-600 mt-4">
           <p>
             Untuk informasi lebih lanjut atau pengajuan proposal baru, 

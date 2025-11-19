@@ -1,16 +1,19 @@
+import { useLocation } from "react-router-dom";
 import Navbar from "../../components/navbar";
-
 import Chatbot from "../../layouts/event/chatbot";
 import HelmetLayout from "../../layouts/helmet";
 
 const ChatbotPage = () => {
+    const { state } = useLocation();
+    const program = state?.program;
+    
     return (
         <div className="inner_body">
             <HelmetLayout
-                title="Tentang Kami | Indonesian Future Leaders Chapter Malang"
-                description="Indonesian Future Leaders berdiri secara resmi sebagai sebuah Lembaga Swadaya Masyarakat yang digerakkan oleh kaum muda, pada tahun 2009, oleh sekelompok anak muda berusia 17-18 tahun."
-                pageLink="/chatbot/:slug"
-                keywords="indonesian future leaders, ifl malang, ifl chapter malang, ifl, tentang kami, about, comper, communication and cooperation"
+                title={`Daftar ${program?.title || 'Event'} | Indonesian Future Leaders Chapter Malang`}
+                description={program?.description || "Daftar program Indonesian Future Leaders Chapter Malang"}
+                pageLink={`/chatbot/${program?.slug || program?.id}`}
+                keywords={`indonesian future leaders, ifl malang, ${program?.title}, pendaftaran`}
             />
             <Navbar />
             <Chatbot />

@@ -2,56 +2,108 @@ import { useNavigate } from "react-router-dom";
 
 const ProgramCard = ({ program, isActive }) => {
     const navigate = useNavigate();
+
+    const isClosed = program.status?.toLowerCase() === 'closed';
+
     const goChatbot = () => {
+        if (isClosed) {
+            return;
+        }
         navigate(`/chatbot/${program.slug || program.id}`, { state: { program } });
+    };
+
+    const getFormattedDate = () => {
+        const dateString = program.start_date || program.date;
+        
+        if (!dateString) return '-';
+        
+        try {
+            const date = new Date(dateString);
+            
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            
+            return `${day}/${month}/${year}`;
+        } catch (error) {
+            return dateString;
+        }
+    };
+
+
+    const getSDGIcon = () => {
+        if (program.sdgs && program.sdgs.length > 0) {
+            const sdgCode = program.sdgs[0].code; 
+            const sdgNumber = sdgCode.replace('SDG', ''); 
+            
+            if (sdgNumber === "3") {
+                return "https://ik.imagekit.io/iflmalang/constant-image/sdgs3?updatedAt=1744982438642";
+            } else if (sdgNumber === "4") {
+                return "https://ik.imagekit.io/iflmalang/constant-image/sdgs4?updatedAt=1744982438696";
+            }
+        }
+        return "https://ik.imagekit.io/iflmalang/constant-image/sdgs4?updatedAt=1744982438696";
+    };
+
+    const getSDGNumbers = () => {
+        if (program.sdgs && program.sdgs.length > 0) {
+            return program.sdgs.map(sdg => sdg.code.replace('SDG', '')).join(', ');
+        }
+        return program.sdgNumber || '-';
+    };
+
+    const getActivities = () => {
+        if (Array.isArray(program.activities)) {
+            return program.activities;
+        }
+        if (typeof program.event_activity === 'string') {
+            return program.event_activity.split(',').map(a => a.trim());
+        }
+        return [];
     };
 
     return (
         <div
-            className={`relative flex flex-col md:flex-row gap-4 bg-white rounded-3xl overflow-hidden shadow-lg mx-2 sm:mx-6 lg:mx-10 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${isActive ? "block" : "hidden"
+            className={`relative flex flex-col md:flex-row gap-4 bg-white rounded-3xl overflow-hidden max-w-4xl shadow-lg mx-2 sm:mx-6 lg:mx-10 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${isActive ? "block" : "hidden"
                 }`}
         >
             <div className="w-full md:w-2/5 lg:w-1/3 relative group">
                 <div className="relative w-full h-64 sm:h-80 md:h-full overflow-hidden rounded-l-3xl">
                     <img
-                        src={program.image}
+                        src={program.event_photo || program.image || 'https://via.placeholder.com/400x300'}
                         alt={program.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
 
-                    {/* Overlay gelap saat hover */}
-                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    {!isClosed && (
+                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    )}
 
-                    {/* Tombol Daftar muncul di tengah */}
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button
-                            onClick={goChatbot}
-                            className="bg-cyan-500 text-white px-5 py-2 rounded-full font-semibold text-sm sm:text-base hover:bg-cyan-600 transition-colors duration-200"
-                        >
-                            Daftar Sekarang
-                        </button>
+                        {isClosed ? (
+                            <div className="bg-gray-400 text-white px-5 py-2 rounded-full font-semibold text-sm sm:text-base cursor-not-allowed">
+                                Pendaftaran Ditutup
+                            </div>
+                        ) : (
+                            <button
+                                onClick={goChatbot}
+                                className="bg-cyan-500 text-white px-5 py-2 rounded-full font-semibold text-sm sm:text-base hover:bg-cyan-600 transition-colors duration-200"
+                            >
+                                Daftar Sekarang
+                            </button>
+                        )}
                     </div>
 
-                    {/* SDG icon tetap di pojok kiri atas */}
                     <div className="absolute top-0 left-0 p-4 z-10">
-                        {program.sdgNumber === "3" ? (
-                            <img
-                                src="https://ik.imagekit.io/iflmalang/constant-image/sdgs3?updatedAt=1744982438642"
-                                alt="SDG 3"
-                                className="w-12 h-12 sm:w-16 sm:h-16"
-                            />
-                        ) : (
-                            <img
-                                src="https://ik.imagekit.io/iflmalang/constant-image/sdgs4?updatedAt=1744982438696"
-                                alt="SDG 4"
-                                className="w-12 h-12 sm:w-16 sm:h-16"
-                            />
-                        )}
+                        <img
+                            src={getSDGIcon()}
+                            alt={`SDG ${getSDGNumbers()}`}
+                            className="w-12 h-12 sm:w-16 sm:h-16"
+                        />
                     </div>
                 </div>
             </div>
 
-            {/* Right Side - Program Info */}
             <div className="w-full md:w-3/5 lg:w-2/3 p-4 sm:p-5 md:p-6 flex flex-col justify-between">
                 <div>
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
@@ -89,12 +141,12 @@ const ProgramCard = ({ program, isActive }) => {
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
-                            <span className="text-cyan-500">{program.date}</span>
+                            <span className="text-cyan-500">{getFormattedDate()}</span>
                         </div>
                     </div>
 
                     <div className="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4">
-                        Supports SDGs No. {program.sdgNumber}
+                        Supports SDGs No. {getSDGNumbers()}
                     </div>
 
                     <div className="text-gray-800 text-sm sm:text-base mb-4 sm:mb-6">
@@ -102,7 +154,6 @@ const ProgramCard = ({ program, isActive }) => {
                     </div>
                 </div>
 
-                {/* Stats + Activities */}
                 <div>
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 mb-4 sm:mb-6">
                         <div className="flex-1 border border-cyan-200 rounded-lg p-2 sm:p-3 flex items-center gap-2 sm:gap-3">
@@ -125,7 +176,7 @@ const ProgramCard = ({ program, isActive }) => {
                             </div>
                             <div>
                                 <div className="font-semibold text-lg sm:text-xl">
-                                    {program.participants}
+                                    {program.participant || program.participants || '0'}
                                 </div>
                                 <div className="text-xs sm:text-sm text-gray-500">
                                     Participant
@@ -153,20 +204,20 @@ const ProgramCard = ({ program, isActive }) => {
                             </div>
                             <div>
                                 <div className="font-semibold text-lg sm:text-xl">
-                                    {program.committee}
+                                    {program.committee || '0'}
                                 </div>
                                 <div className="text-xs sm:text-sm text-gray-500">Committee</div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Activities */}
+    
                     <div>
                         <div className="font-medium text-sm sm:text-base mb-2">
                             Kegiatan Program:
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm sm:text-base">
-                            {program.activities.map((activity, index) => (
+                            {getActivities().map((activity, index) => (
                                 <div key={index} className="flex items-start gap-2">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -189,8 +240,13 @@ const ProgramCard = ({ program, isActive }) => {
                     <div className="w-full mt-4">
                         <button
                             onClick={goChatbot}
-                            className="py-2 px-6 w-full bg-cyan-500 hover:bg-cyan-600 rounded-2xl font-semibold text-lg text-white">
-                            Daftar
+                            disabled={isClosed}
+                            className={`py-2 px-6 w-full rounded-2xl font-semibold text-lg text-white transition-colors ${
+                                isClosed 
+                                    ? 'bg-gray-400 cursor-not-allowed' 
+                                    : 'bg-cyan-500 hover:bg-cyan-600'
+                            }`}>
+                            {isClosed ? 'Pendaftaran Ditutup' : 'Daftar Sekarang'}
                         </button>
                     </div>
                 </div>

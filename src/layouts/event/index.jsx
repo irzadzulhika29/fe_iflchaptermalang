@@ -1,16 +1,25 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { programsData } from "../../static/event/program/programData";
-import { projectsData } from "../../static/event/project/projectsData";
 import { headerSlidesProgram, headerSlidesProject } from "../../static/event/eventData";
 import ProgramList from "../../components/programlist";
 import ProjectList from "../../components/projectlist";
 import TabButton from "../../components/tabbutton";
+import { useGetAllEvents } from "../../features/event";
 
 const TABS = { PROGRAM: 0, PROJECT: 1 };
 
 const EventSection = () => {
     const [activeTab, setActiveTab] = useState(TABS.PROGRAM);
     const [activeSlide, setActiveSlide] = useState(0);
+
+    const { data: eventsFromApi, isLoading } = useGetAllEvents();
+    
+    const programEvents = eventsFromApi?.filter(
+        event => event.category?.toLowerCase() === 'program'
+    ) || [];
+    
+    const projectEvents = eventsFromApi?.filter(
+        event => event.category?.toLowerCase() === 'project'
+    ) || [];
 
     const isPausedRef = useRef(false);
     const reducedMotion = useMemo(() => {
@@ -118,27 +127,48 @@ const EventSection = () => {
                     </div>
                 </div>
 
-                <div className="mb-10 sm:mb-16 md:mb-20">
-                    {activeTab === TABS.PROGRAM ? (
-                        <div
-                            id="panel-program"
-                            role="tabpanel"
-                            aria-labelledby="tab-program"
-                            className="animate-fade-in"
-                        >
-                            <ProgramList items={programsData} />
-                        </div>
-                    ) : (
-                        <div
-                            id="panel-project"
-                            role="tabpanel"
-                            aria-labelledby="tab-project"
-                            className="animate-fade-in"
-                        >
-                            <ProjectList items={projectsData} />
-                        </div>
-                    )}
-                </div>
+                {isLoading && (
+                    <div className="text-center py-12">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
+                        <div className="text-gray-500">Loading events...</div>
+                    </div>
+                )}
+
+                {!isLoading && (
+                    <div className="mb-10 sm:mb-16 md:mb-20">
+                        {activeTab === TABS.PROGRAM ? (
+                            <div
+                                id="panel-program"
+                                role="tabpanel"
+                                aria-labelledby="tab-program"
+                                className="animate-fade-in"
+                            >
+                                {programEvents.length > 0 ? (
+                                    <ProgramList items={programEvents} />
+                                ) : (
+                                    <div className="text-center py-12 text-gray-500">
+                                        Belum ada program tersedia
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div
+                                id="panel-project"
+                                role="tabpanel"
+                                aria-labelledby="tab-project"
+                                className="animate-fade-in"
+                            >
+                                {projectEvents.length > 0 ? (
+                                    <ProjectList items={projectEvents} />
+                                ) : (
+                                    <div className="text-center py-12 text-gray-500">
+                                        Belum ada project tersedia
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                )}
             </section>
         </>
     );
