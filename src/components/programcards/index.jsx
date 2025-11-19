@@ -64,45 +64,51 @@ const ProgramCard = ({ program, isActive }) => {
 
     return (
         <div
-            className={`relative flex flex-col md:flex-row gap-4 bg-white rounded-3xl overflow-hidden max-w-4xl shadow-lg mx-2 sm:mx-6 lg:mx-10 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${isActive ? "block" : "hidden"
-                }`}
+            className={`relative flex flex-col md:flex-row gap-4 bg-white rounded-3xl overflow-hidden max-w-4xl shadow-lg mx-2 sm:mx-6 lg:mx-10 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${isActive ? "block" : "hidden"}`}
         >
-            <div className="w-full md:w-2/5 lg:w-1/3 relative group">
-                <div className="relative w-full h-64 sm:h-80 md:h-full overflow-hidden rounded-l-3xl">
-                    <img
-                        src={program.event_photo || program.image || 'https://via.placeholder.com/400x300'}
-                        alt={program.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
+          <div className="w-full md:w-2/5 lg:w-1/3 relative group">
+    <div className="relative w-full h-64 sm:h-80 md:h-full overflow-hidden rounded-l-3xl">
+        {/* Gambar atas */}
+        <img
+            src={program.event_photo || program.image || 'https://via.placeholder.com/400x300'}
+            alt={program.title}
+            className="w-full h-1/2 object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+        
+        <img
+            src={program.event_photo || program.image || 'https://via.placeholder.com/400x300'}
+            alt={program.title}
+            className="w-full h-1/2 object-cover transition-transform duration-500 group-hover:scale-110"
+        />
 
-                    {!isClosed && (
-                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    )}
+        {!isClosed && (
+            <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        )}
 
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {isClosed ? (
-                            <div className="bg-gray-400 text-white px-5 py-2 rounded-full font-semibold text-sm sm:text-base cursor-not-allowed">
-                                Pendaftaran Ditutup
-                            </div>
-                        ) : (
-                            <button
-                                onClick={goChatbot}
-                                className="bg-cyan-500 text-white px-5 py-2 rounded-full font-semibold text-sm sm:text-base hover:bg-cyan-600 transition-colors duration-200"
-                            >
-                                Daftar Sekarang
-                            </button>
-                        )}
-                    </div>
-
-                    <div className="absolute top-0 left-0 p-4 z-10">
-                        <img
-                            src={getSDGIcon()}
-                            alt={`SDG ${getSDGNumbers()}`}
-                            className="w-12 h-12 sm:w-16 sm:h-16"
-                        />
-                    </div>
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            {isClosed ? (
+                <div className="bg-gray-400 text-white px-5 py-2 rounded-full font-semibold text-sm sm:text-base cursor-not-allowed">
+                    Pendaftaran Ditutup
                 </div>
-            </div>
+            ) : (
+                <button
+                    onClick={goChatbot}
+                    className="bg-cyan-500 text-white px-5 py-2 rounded-full font-semibold text-sm sm:text-base hover:bg-cyan-600 transition-colors duration-200"
+                >
+                    Daftar Sekarang
+                </button>
+            )}
+        </div>
+
+        <div className="absolute top-0 left-0 p-4 z-10">
+            <img
+                src={getSDGIcon()}
+                alt={`SDG ${getSDGNumbers()}`}
+                className="w-12 h-12 sm:w-16 sm:h-16"
+            />
+        </div>
+    </div>
+</div>
 
             <div className="w-full md:w-3/5 lg:w-2/3 p-4 sm:p-5 md:p-6 flex flex-col justify-between">
                 <div>
@@ -149,7 +155,15 @@ const ProgramCard = ({ program, isActive }) => {
                         Supports SDGs No. {getSDGNumbers()}
                     </div>
 
-                    <div className="text-gray-800 text-sm sm:text-base mb-4 sm:mb-6">
+                    <div
+                        className="text-gray-800 text-sm sm:text-base mb-4 sm:mb-6 overflow-hidden"
+                        style={{
+                            display: '-webkit-box',
+                            WebkitLineClamp: 7,
+                            WebkitBoxOrient: 'vertical',
+                            maxHeight: '12em',
+                        }}
+                    >
                         {program.description}
                     </div>
                 </div>
@@ -184,8 +198,6 @@ const ProgramCard = ({ program, isActive }) => {
                             </div>
                         </div>
 
-            
-
                         <div className="flex-1 border border-cyan-200 rounded-lg p-2 sm:p-3 flex items-center gap-2 sm:gap-3">
                             <div className="bg-cyan-100 rounded-full p-1 sm:p-2">
                                 <svg
@@ -213,7 +225,6 @@ const ProgramCard = ({ program, isActive }) => {
                         </div>
                     </div>
 
-    
                     <div>
                         <div className="font-medium text-sm sm:text-base mb-2">
                             Kegiatan Program:
@@ -253,9 +264,6 @@ const ProgramCard = ({ program, isActive }) => {
                             {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(program.price || 0)}
                         </div>
                     </div>
-
-                    
-
 
                     <div className="w-full mt-4">
                         <button
