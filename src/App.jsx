@@ -38,7 +38,8 @@ import {
   SoonDashboardPage,
   UserPage,
   ProposalManagementPage,
-  EventManagementPage
+  EventManagementPage,
+  VolunteerPage,
 } from "./page/dashboard";
 
 // authentication page
@@ -178,6 +179,7 @@ const App = () => {
               }
             >
               <Route path="/admin/dashboard/event" element={<EventManagementPage />} />
+              <Route path="/admin/dashboard/volunteer" element={<VolunteerPage />} />
             </Route>
 
 

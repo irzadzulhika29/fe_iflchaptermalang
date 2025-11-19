@@ -1,21 +1,17 @@
 export default function ProgressIndicator({ current, total }) {
   const percentage = Math.round((current / total) * 100);
-  
+
   return (
-    <div className="w-11/12 fixed left-0 right-0 mx-auto translate-y-12 rounded-lg p-2 border bg-white">
-      <div className="w-full bg-slate-200 rounded-full h-1 overflow-hidden mb-1.5">
+    <div className="rounded-2xl fixed w-11/12 left-0 right-0 mx-auto translate-y-20 border border-primary-1/15 bg-white/95 px-5 py-4 shadow-lg shadow-primary-1/10">
+      <div className="mb-3 flex items-center justify-between text-xs font-semibold text-primary-2">
+        <span>{current} dari {total} pertanyaan</span>
+        <span>{percentage}%</span>
+      </div>
+      <div className="h-2 w-full rounded-full bg-primary-1/10">
         <div
-          className="bg-gradient-to-r from-cyan-500 to-blue-500 h-full transition-all duration-500 ease-out"
+          className="h-full rounded-full bg-gradient-to-r from-primary-2 to-primary-1 transition-all duration-500 ease-out"
           style={{ width: `${percentage}%` }}
         />
-      </div>
-      
-      <div className="flex items-center justify-between text-[10px] text-slate-600">
-        <span className="flex items-center gap-1">
-          <span className="text-cyan-600">●</span>
-          <span>{current} dari {total} pertanyaan</span>
-        </span>
-        <span className="font-semibold text-cyan-600">{percentage}%</span>
       </div>
     </div>
   );
