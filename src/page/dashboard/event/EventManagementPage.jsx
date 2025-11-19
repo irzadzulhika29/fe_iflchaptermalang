@@ -43,11 +43,11 @@ const EventCard = ({ event, onEdit, onDelete }) => {
           {event.category}
         </div>
 
-       <div className="h-16 ">
-         <h3 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2">
-          {event.title}
-        </h3>
-       </div>
+        <div className="h-16 ">
+          <h3 className="text-xl font-bold text-gray-800 mb-3 line-clamp-2">
+            {event.title}
+          </h3>
+        </div>
 
         <div className="flex items-center gap-2 mb-2 flex-wrap">
           {event.sdgs && event.sdgs.length > 0 ? (
@@ -94,11 +94,38 @@ const EventCard = ({ event, onEdit, onDelete }) => {
             <span className="ml-1">
               {event.start_date
                 ? new Date(event.start_date).toLocaleDateString("id-ID", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                  })
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })
                 : "-"}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center text-green-600 text-sm font-semibold">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-4 h-4"
+            >
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </svg>
+            <span className="ml-1">
+              {event.price && Number(event.price) > 0
+                ? new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).format(Number(event.price))
+                : "Gratis"}
             </span>
           </div>
         </div>
@@ -132,10 +159,10 @@ const EventCard = ({ event, onEdit, onDelete }) => {
           Updated:{" "}
           {event.updated_at
             ? new Date(event.updated_at).toLocaleDateString("id-ID", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric",
-              })
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })
             : "-"}
         </div>
       </div>
@@ -239,21 +266,19 @@ const EventManagementPage = () => {
         <div className="flex gap-2 mb-8 border-b border-gray-200">
           <button
             onClick={() => setActiveTab("program")}
-            className={`px-6 py-3 font-semibold transition-all duration-200 border-b-2 ${
-              activeTab === "program"
-                ? "border-cyan-500 text-cyan-500"
-                : "border-transparent text-gray-500 hover:text-gray-700"
-            }`}
+            className={`px-6 py-3 font-semibold transition-all duration-200 border-b-2 ${activeTab === "program"
+              ? "border-cyan-500 text-cyan-500"
+              : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
           >
             Program
           </button>
           <button
             onClick={() => setActiveTab("project")}
-            className={`px-6 py-3 font-semibold transition-all duration-200 border-b-2 ${
-              activeTab === "project"
-                ? "border-cyan-500 text-cyan-500"
-                : "border-transparent text-gray-500 hover:text-gray-700"
-            }`}
+            className={`px-6 py-3 font-semibold transition-all duration-200 border-b-2 ${activeTab === "project"
+              ? "border-cyan-500 text-cyan-500"
+              : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
           >
             Project
           </button>
