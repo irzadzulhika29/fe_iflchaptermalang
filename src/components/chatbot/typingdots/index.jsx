@@ -1,12 +1,11 @@
 export default function TypingDots() {
   return (
-    <div className="mb-1 flex">
-      <div className="max-w-[85%] bg-cyan-500 text-white rounded-2xl rounded-bl-sm p-3 text-sm">
-        <div className="flex items-center gap-1 h-4">
-          <span className="w-2 h-2 rounded-full bg-white/90 animate-bounce [animation-delay:-0.2s]" />
-          <span className="w-2 h-2 rounded-full bg-white/90 animate-bounce" />
-          <span className="w-2 h-2 rounded-full bg-white/90 animate-bounce [animation-delay:0.2s]" />
-        </div>
+    <div className="mb-2 flex">
+      <div className="max-w-[85%] rounded-3xl rounded-bl-md bg-primary-1 p-3 text-sm text-white shadow-lg shadow-primary-1/25">        <div className="flex h-4 items-center gap-1">
+        <span className="h-2 w-2 animate-bounce rounded-full bg-white/90 [animation-delay:-0.2s]" />
+        <span className="h-2 w-2 animate-bounce rounded-full bg-white/90" />
+        <span className="h-2 w-2 animate-bounce rounded-full bg-white/90 [animation-delay:0.2s]" />
+      </div>
       </div>
     </div>
   );

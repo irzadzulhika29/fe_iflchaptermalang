@@ -1,105 +1,133 @@
-import { FileImage, CheckCircle2, Edit3 } from "lucide-react";
+import { useState } from "react";
+import { CheckCircle2, Edit3, ExternalLink, X, Check } from "lucide-react";
 
-export default function SummaryCard({ answers, mapping, files = {}, onConfirm, onEdit }) {
-    const entries = Object.keys(mapping)
-        .filter((k) => answers[k] != null && String(answers[k]).trim() !== "")
-        .map((k) => ({
-            key: k,
-            label: mapping[k],
-            value: answers[k],
-            hasFile: !!files[k],
-            fileData: files[k],
-        }));
+export default function SummaryCard({ answers, mapping, onConfirm, onEdit }) {
+  const [editMode, setEditMode] = useState(null); // key yang sedang diedit
+  const [editValue, setEditValue] = useState("");
+  const [localAnswers, setLocalAnswers] = useState(answers);
 
-    return (
-        <div className="mb-2 w-full max-w-2xl">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-t-2xl p-4">
-                <div className="flex items-center gap-2 mb-1">
-                    <CheckCircle2 size={20} />
-                    <h3 className="font-bold text-lg">Rangkuman Pendaftaran</h3>
-                </div>
-                <p className="text-cyan-50 text-sm">
-                    Periksa kembali data kamu sebelum mengirim
-                </p>
-            </div>
+  const entries = Object.keys(mapping)
+    .filter((k) => localAnswers[k] != null && String(localAnswers[k]).trim() !== "")
+    .map((k) => ({
+      key: k,
+      label: mapping[k],
+      value: localAnswers[k],
+    }));
 
-            {/* Content */}
-            <div className="bg-white border-2 border-cyan-500 rounded-b-2xl">
-                {entries.length ? (
-                    <ul className="divide-y divide-slate-200">
-                        {entries.map((entry, i) => (
-                            <li key={i} className="p-4 hover:bg-slate-50 transition-colors">
-                                {/* Label */}
-                                <div className="text-xs font-semibold text-cyan-600 uppercase tracking-wide mb-1">
-                                    {entry.label}
-                                </div>
+  const startEdit = (key, value) => {
+    setEditMode(key);
+    setEditValue(value);
+  };
 
-                                {/* Value atau File Preview */}
-                                {entry.hasFile ? (
-                                    <div className="space-y-2">
-                                        {/* File Info */}
-                                        <div className="flex items-center gap-2 text-sm text-slate-700">
-                                            <FileImage size={16} className="text-cyan-500" />
-                                            <span className="font-medium">
-                                                {entry.fileData.name}
-                                            </span>
-                                            <span className="text-xs text-slate-500">
-                                                ({(entry.fileData.size / 1024).toFixed(1)} KB)
-                                            </span>
-                                        </div>
+  const saveEdit = (key) => {
+    setLocalAnswers({ ...localAnswers, [key]: editValue });
+    setEditMode(null);
+    setEditValue("");
+  };
 
-                                        {/* Image Preview */}
-                                        <div className="relative inline-block">
-                                            <img
-                                                src={entry.fileData.preview}
-                                                alt={`Preview ${entry.label}`}
-                                                className="w-full max-w-xs rounded-lg border-2 border-slate-200 shadow-sm"
-                                            />
-                                            <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded text-xs font-medium shadow-md">
-                                                ✓ Ready
-                                            </div>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="text-slate-800 text-sm font-medium break-words">
-                                        {entry.value}
-                                    </div>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <div className="p-8 text-center text-slate-400">
-                        <p>Belum ada data yang diisi</p>
-                    </div>
-                )}
+  const cancelEdit = () => {
+    setEditMode(null);
+    setEditValue("");
+  };
 
-                {/* Footer Question */}
-                <div className="bg-slate-50 p-4 border-t-2 border-slate-200">
-                    <p className="text-center text-slate-700 font-medium">
-                        Apakah semua data sudah benar?
-                    </p>
-                </div>
-            </div>
+  const handleConfirmWithEdits = () => {
+    // Pass edited answers back
+    onConfirm(localAnswers);
+  };
 
-            {/* Action Buttons */}
-            <div className="flex gap-3 mt-4">
-                <button
-                    onClick={onConfirm}
-                    className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 active:scale-95"
-                >
-                    <CheckCircle2 size={18} />
-                    Ya, Kirim Sekarang
-                </button>
-                <button
-                    onClick={onEdit}
-                    className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 active:scale-95"
-                >
-                    <Edit3 size={18} />
-                    Edit
-                </button>
-            </div>
+  return (
+    <div className="w-full max-w-2xl rounded-[28px] border border-primary-1/15 bg-white shadow-2xl shadow-primary-1/10">
+      <div className="rounded-t-[28px] bg-primary-1 px-6 py-5 text-white">
+        <div className="flex items-center gap-2">
+          <CheckCircle2 size={22} />
+          <div>
+            <h3 className="text-lg font-bold leading-tight">Review Data Kamu</h3>
+            <p className="text-sm text-white/80">Klik ikon edit untuk mengubah data.</p>
+          </div>
         </div>
-    );
+      </div>
+
+      <div className="divide-y divide-slate-100 px-6">
+        {entries.length ? (
+          entries.map((entry) => (
+            <div key={entry.key} className="py-4">
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex-1">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary-2">
+                    {entry.label}
+                  </p>
+
+                  {editMode === entry.key ? (
+                    <div className="mt-2 flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        className="flex-1 rounded-lg border border-primary-1/30 px-3 py-2 text-sm focus:border-primary-1 focus:outline-none focus:ring-2 focus:ring-primary-1/20"
+                        autoFocus
+                      />
+                      <button
+                        onClick={() => saveEdit(entry.key)}
+                        className="rounded-lg bg-primary-1 p-2 text-white hover:bg-primary-2"
+                      >
+                        <Check size={16} />
+                      </button>
+                      <button
+                        onClick={cancelEdit}
+                        className="rounded-lg border border-slate-300 p-2 text-slate-600 hover:bg-slate-100"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ) : (
+                    <p className="mt-1 text-sm text-dark-1 break-words">
+                      {entry.value?.startsWith("http") ? (
+                        <a
+                          href={entry.value}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1 rounded-full border border-primary-1/20 px-3 py-1 text-primary-2 hover:bg-primary-1/5"
+                        >
+                          Lihat Link
+                          <ExternalLink size={14} />
+                        </a>
+                      ) : (
+                        entry.value
+                      )}
+                    </p>
+                  )}
+                </div>
+
+                {editMode !== entry.key && (
+                  <button
+                    onClick={() => startEdit(entry.key, entry.value)}
+                    className="rounded-lg border border-primary-1/20 p-2 text-primary-2 hover:bg-primary-1/5"
+                  >
+                    <Edit3 size={16} />
+                  </button>
+                )}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="py-10 text-center text-slate-400">Belum ada data yang diisi</div>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-3 border-t border-slate-100 bg-slate-50 px-6 py-5 sm:flex-row">
+        <button
+          onClick={handleConfirmWithEdits}
+          className="flex-1 rounded-2xl bg-primary-1 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-primary-1/30 transition hover:bg-primary-2 active:scale-95"
+        >
+          Kirim Sekarang
+        </button>
+        <button
+          onClick={onEdit}
+          className="flex items-center justify-center gap-2 rounded-2xl border border-primary-1/20 px-5 py-3 text-sm font-semibold text-primary-2 transition hover:bg-primary-1/5 active:scale-95"
+        >
+          Kembali ke Chat
+        </button>
+      </div>
+    </div>
+  );
 }
