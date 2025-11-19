@@ -1,12 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAllVolunteers } from "../hooks";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { volunteerAPI } from "../api";
 
 export const useGetAllVolunteers = () => {
   return useQuery({
-    queryKey: ["getAllVolunteers"],
-    queryFn: async () => {
-      const responseGetAllVolunteers = await getAllVolunteers();
-      return responseGetAllVolunteers || "";
-    },
+    queryKey: ["volunteers"],
+    queryFn: volunteerAPI.getAll,
+  });
+};
+
+export const useRegisterVolunteer = () => {
+  return useMutation({
+    mutationFn: volunteerAPI.register,
   });
 };

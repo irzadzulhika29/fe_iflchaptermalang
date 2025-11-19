@@ -30,9 +30,6 @@ export {
   CampaignPage,
   DonationHistory,
   ProposalManagementPage,
-<<<<<<< HEAD
   VolunteerPage,
-=======
   EventManagementPage,
->>>>>>> 8999a8e1ffbe8224a5fcf671f5e6368d72f75936
 };
