@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const globalAPI = import.meta.env.VITE_BASE_API;
+export const globalAPI = import.meta.env.VITE_TEST_API;
 
 const API = axios.create({
   baseURL: `${globalAPI}`,

@@ -16,6 +16,8 @@ export default function Chatbot() {
     const navigate = useNavigate();
     const { state } = useLocation();
     const programFromState = state?.program;
+    const finalPrice = state?.finalPrice;
+    const originalPrice = programFromState?.price || 75000;
 
     const program = useMemo(
         () =>
@@ -53,6 +55,7 @@ export default function Chatbot() {
         handleQuickReply,
         handleEdit,
         pushBot,
+        flowIndex,
     } = useChatFlow(flow);
 
     const { mutate: submitRegistration, isPending: isSubmitting } = useRegisterVolunteer();
@@ -110,17 +113,7 @@ export default function Chatbot() {
 
         submitRegistration(payload, {
             onSuccess: (data) => {
-                console.log("Registration success:", data);
-
-                let successMsg = "🎉 Mantap! Pendaftaran kamu berhasil dikirim!\n\n";
-                successMsg += `ID Pendaftaran: ${data?.registration_id}\n`;
-                successMsg += `Nama: ${data?.name}\n`;
-                successMsg += `Event: ${data?.event?.title}\n`;
-                successMsg += `Tanggal: ${data?.event?.start_date}\n`;
-                successMsg += `Total Biaya: Rp ${parseInt(data?.pricing?.final_price || 0).toLocaleString(
-                    "id-ID"
-                )}\n`;
-
+                
                 if (data?.pricing?.has_discount) {
                     successMsg += `Diskon: Rp ${parseInt(
                         data?.pricing?.discount_amount || 0
@@ -185,6 +178,10 @@ export default function Chatbot() {
             onQuickReply={handleQuickReply}
             onConfirm={handleConfirm}
             onEdit={handleEdit}
+            flow={flow}
+            flowIndex={flowIndex}
+            finalPrice={finalPrice}
+            originalPrice={originalPrice}
         />
     );
 }
