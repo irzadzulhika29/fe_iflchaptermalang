@@ -2,7 +2,13 @@ import { useNavigate } from "react-router-dom";
 
 const ProgramCard = ({ program, isActive }) => {
     const navigate = useNavigate();
+
+    const isClosed = program.status?.toLowerCase() === 'closed';
+
     const goChatbot = () => {
+        if (isClosed) {
+            return;
+        }
         navigate(`/chatbot/${program.slug || program.id}`, { state: { program } });
     };
 
@@ -12,28 +18,23 @@ const ProgramCard = ({ program, isActive }) => {
         if (!dateString) return '-';
         
         try {
-            // Parse date
             const date = new Date(dateString);
             
-            // Format: DD/MM/YYYY
             const day = String(date.getDate()).padStart(2, '0');
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const year = date.getFullYear();
             
             return `${day}/${month}/${year}`;
         } catch (error) {
-            // If parsing fails, return original string
             return dateString;
         }
     };
 
 
-    // ========== HELPER FUNCTIONS ==========
-    // Get first SDG icon or default
     const getSDGIcon = () => {
         if (program.sdgs && program.sdgs.length > 0) {
-            const sdgCode = program.sdgs[0].code; // e.g., "SDG3"
-            const sdgNumber = sdgCode.replace('SDG', ''); // "3"
+            const sdgCode = program.sdgs[0].code; 
+            const sdgNumber = sdgCode.replace('SDG', ''); 
             
             if (sdgNumber === "3") {
                 return "https://ik.imagekit.io/iflmalang/constant-image/sdgs3?updatedAt=1744982438642";
@@ -41,11 +42,9 @@ const ProgramCard = ({ program, isActive }) => {
                 return "https://ik.imagekit.io/iflmalang/constant-image/sdgs4?updatedAt=1744982438696";
             }
         }
-        // Default to SDG 4
         return "https://ik.imagekit.io/iflmalang/constant-image/sdgs4?updatedAt=1744982438696";
     };
 
-    // Get SDG numbers as text
     const getSDGNumbers = () => {
         if (program.sdgs && program.sdgs.length > 0) {
             return program.sdgs.map(sdg => sdg.code.replace('SDG', '')).join(', ');
@@ -53,7 +52,6 @@ const ProgramCard = ({ program, isActive }) => {
         return program.sdgNumber || '-';
     };
 
-    // Parse activities from string to array
     const getActivities = () => {
         if (Array.isArray(program.activities)) {
             return program.activities;
@@ -77,20 +75,25 @@ const ProgramCard = ({ program, isActive }) => {
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
 
-                    {/* Overlay gelap saat hover */}
-                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    {!isClosed && (
+                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    )}
 
-                    {/* Tombol Daftar muncul di tengah */}
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button
-                            onClick={goChatbot}
-                            className="bg-cyan-500 text-white px-5 py-2 rounded-full font-semibold text-sm sm:text-base hover:bg-cyan-600 transition-colors duration-200"
-                        >
-                            Daftar Sekarang
-                        </button>
+                        {isClosed ? (
+                            <div className="bg-gray-400 text-white px-5 py-2 rounded-full font-semibold text-sm sm:text-base cursor-not-allowed">
+                                Pendaftaran Ditutup
+                            </div>
+                        ) : (
+                            <button
+                                onClick={goChatbot}
+                                className="bg-cyan-500 text-white px-5 py-2 rounded-full font-semibold text-sm sm:text-base hover:bg-cyan-600 transition-colors duration-200"
+                            >
+                                Daftar Sekarang
+                            </button>
+                        )}
                     </div>
 
-                    {/* SDG icon tetap di pojok kiri atas */}
                     <div className="absolute top-0 left-0 p-4 z-10">
                         <img
                             src={getSDGIcon()}
@@ -101,7 +104,6 @@ const ProgramCard = ({ program, isActive }) => {
                 </div>
             </div>
 
-            {/* Right Side - Program Info */}
             <div className="w-full md:w-3/5 lg:w-2/3 p-4 sm:p-5 md:p-6 flex flex-col justify-between">
                 <div>
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
@@ -152,7 +154,6 @@ const ProgramCard = ({ program, isActive }) => {
                     </div>
                 </div>
 
-                {/* Stats + Activities */}
                 <div>
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 mb-4 sm:mb-6">
                         <div className="flex-1 border border-cyan-200 rounded-lg p-2 sm:p-3 flex items-center gap-2 sm:gap-3">
@@ -210,7 +211,7 @@ const ProgramCard = ({ program, isActive }) => {
                         </div>
                     </div>
 
-                    {/* Activities */}
+    
                     <div>
                         <div className="font-medium text-sm sm:text-base mb-2">
                             Kegiatan Program:
@@ -239,8 +240,13 @@ const ProgramCard = ({ program, isActive }) => {
                     <div className="w-full mt-4">
                         <button
                             onClick={goChatbot}
-                            className="py-2 px-6 w-full bg-cyan-500 hover:bg-cyan-600 rounded-2xl font-semibold text-lg text-white">
-                            Daftar
+                            disabled={isClosed}
+                            className={`py-2 px-6 w-full rounded-2xl font-semibold text-lg text-white transition-colors ${
+                                isClosed 
+                                    ? 'bg-gray-400 cursor-not-allowed' 
+                                    : 'bg-cyan-500 hover:bg-cyan-600'
+                            }`}>
+                            {isClosed ? 'Pendaftaran Ditutup' : 'Daftar Sekarang'}
                         </button>
                     </div>
                 </div>

@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query"; // ← TAMBAHKAN useMutation
-import { getAllSdg, getAllEvents, addEventByAdmin } from "../hook";
+import { getAllSdg, getAllEvents, addEventByAdmin, editEventByAdmin } from "../hook";
 
 export const useGetAllSdg = () => {
   return useQuery({
@@ -11,7 +11,6 @@ export const useGetAllSdg = () => {
   });
 };
 
-// Helper hook untuk format SDG options untuk react-select
 export const useGetSdgOptions = () => {
   const { data, isLoading, error } = useGetAllSdg();
   
@@ -25,7 +24,6 @@ export const useGetSdgOptions = () => {
   return { sdgOptions, isLoading, error };
 };
 
-// GET All Events
 export const useGetAllEvents = () => {
   return useQuery({
     queryKey: ["getAllEvents"],
@@ -36,11 +34,18 @@ export const useGetAllEvents = () => {
   });
 };
 
-// POST - Add Event
 export const useAddEventByAdmin = () => {
-  return useMutation({ // ← Sekarang useMutation sudah di-import
+  return useMutation({
     mutationFn: (body) => {
       return addEventByAdmin(body);
+    },
+  });
+};
+
+export const useEditEventByAdmin = () => {
+  return useMutation({
+    mutationFn: ({ eventId, body }) => {
+      return editEventByAdmin({ eventId, body });
     },
   });
 };

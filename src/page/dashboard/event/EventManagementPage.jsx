@@ -8,11 +8,13 @@ import Dashboard from "../../../layouts/dashboard";
 import dataUrlToFile from "../../../utils/dataUrlToFile";
 
 import AddEventModal from './AddEventModal';
-import { useGetAllEvents, useAddEventByAdmin } from '../../../features/event';
+import EditEventModal from './EditEventModal';  // ← Import EditEventModal
+import { useGetAllEvents, useAddEventByAdmin, useEditEventByAdmin } from '../../../features/event';
 
 const EventCard = ({ event, onEdit, onDelete }) => {
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      {/* ... existing code (sama seperti sebelumnya) ... */}
       {/* Image Section */}
       <div className="relative">
         <img
@@ -64,8 +66,7 @@ const EventCard = ({ event, onEdit, onDelete }) => {
             <span className="text-xs text-gray-400">No SDGs</span>
           )}
         </div>
-
-        {/* Date Info */}
+            
         <div className="flex items-center gap-2 mb-2">
           <div className="flex items-center text-cyan-500 text-sm">
             <svg
@@ -85,7 +86,6 @@ const EventCard = ({ event, onEdit, onDelete }) => {
           </div>
         </div>
 
-        {/* Participant & Committee */}
         <div className="flex gap-3 mb-3 text-sm">
           <div className="text-gray-600">
             <span className="font-semibold">{event.participant || 0}</span> Participants
@@ -95,7 +95,6 @@ const EventCard = ({ event, onEdit, onDelete }) => {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex gap-2">
           <button
             onClick={() => onEdit(event)}
@@ -125,7 +124,6 @@ const EventCard = ({ event, onEdit, onDelete }) => {
           </button>
         </div>
 
-        {/* Last Updated Info */}
         <div className="mt-3 text-xs text-gray-400">
           Updated: {new Date(event.updated_at).toLocaleDateString('id-ID')}
         </div>
@@ -136,77 +134,80 @@ const EventCard = ({ event, onEdit, onDelete }) => {
 
 const EventManagementPage = () => {
   const [activeTab, setActiveTab] = useState('program');
-  const [showModal, setShowModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);  
+  const [selectedEvent, setSelectedEvent] = useState(null);   
 
-  // ========== API HOOKS DI PARENT ========== 
   const { data: eventsFromApi, isLoading: loadingEvents, refetch } = useGetAllEvents();
   const { mutate: addEvent, isPending: addingEvent } = useAddEventByAdmin();
-  // ==========================================
+  const { mutate: editEvent, isPending: editingEvent } = useEditEventByAdmin();  
 
-  // ========== FILTER EVENTS BY CATEGORY ==========
   const filteredEvents = eventsFromApi?.filter(
     event => event.category.toLowerCase() === activeTab.toLowerCase()
   ) || [];
-  // ================================================
 
   const handleEdit = (event) => {
     console.log('Edit event:', event);
-    // TODO: Implementasi edit logic
+    setSelectedEvent(event);      
+    setShowEditModal(true);       
   };
 
   const handleDelete = (event) => {
     if (window.confirm(`Apakah Anda yakin ingin menghapus ${event.title}?`)) {
       console.log('Delete event:', event);
-      // TODO: Call delete API
     }
   };
 
   const handleAddNewEvent = () => {
-    setShowModal(true);
+    setShowAddModal(true);
   };
 
-  // ========== HANDLER ADD EVENT DI PARENT ==========
   const handleSubmitEvent = (formData) => {
     console.log('Parent received formData:', formData);
     
-    // Log FormData untuk debugging
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ': ' + pair[1]);
-    }
-    
-    // Call API mutation
     addEvent(formData, {
       onSuccess: (response) => {
         console.log('Event berhasil ditambahkan:', response);
-        setShowModal(false); // Tutup modal setelah sukses
-        refetch(); // Refresh data events
-        // Data akan otomatis refresh karena reloadPage di service
+        setShowAddModal(false);
+        refetch();
       },
       onError: (error) => {
         console.error('Error adding event:', error);
-        // Error sudah di-handle di service dengan SweetAlert
       },
     });
   };
-  // ================================================
+
+  const handleUpdateEvent = (eventId, formData) => {
+    console.log('Parent updating event:', eventId);
+    
+    editEvent({ eventId, body: formData }, {
+      onSuccess: (response) => {
+        console.log('Event berhasil diupdate:', response);
+        setShowEditModal(false);
+        setSelectedEvent(null);
+        refetch();
+      },
+      onError: (error) => {
+        console.error('Error updating event:', error);
+      },
+    });
+  };
 
   return (
     <Dashboard title="Event Management">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header Section */}
         <div className="flex flex-col mt-4 sm:flex-row justify-end items-start sm:items-center mb-6 gap-4">
           
           <Button 
             onClick={handleAddNewEvent} 
             ariaLabel="navigate-add-event" 
             intent="secondary"
-            disabled={addingEvent}
+            disabled={addingEvent || editingEvent}
           >
             {addingEvent ? 'Adding...' : 'Add New Event'}
           </Button>
         </div>
 
-        {/* Tab Navigation */}
         <div className="flex gap-2 mb-8 border-b border-gray-200">
           <button
             onClick={() => setActiveTab('program')}
@@ -230,7 +231,6 @@ const EventManagementPage = () => {
           </button>
         </div>
 
-        {/* Loading State */}
         {loadingEvents && (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-500 mx-auto mb-4"></div>
@@ -238,7 +238,6 @@ const EventManagementPage = () => {
           </div>
         )}
 
-        {/* Event Cards Grid */}
         {!loadingEvents && filteredEvents.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredEvents.map((event, index) => (
@@ -252,7 +251,6 @@ const EventManagementPage = () => {
           </div>
         )}
 
-        {/* Empty State */}
         {!loadingEvents && filteredEvents.length === 0 && (
           <div className="text-center py-12">
             <div className="text-gray-400 mb-4">
@@ -281,13 +279,20 @@ const EventManagementPage = () => {
         )}
       </div>
 
-      {/* Add Event Modal - PASS HANDLER KE CHILD */}
       <AddEventModal 
-        showModal={showModal} 
-        setShowModal={setShowModal}
+        showModal={showAddModal} 
+        setShowModal={setShowAddModal}
         activeTab={activeTab}
         onSubmit={handleSubmitEvent}
         isSubmitting={addingEvent}
+      />
+
+      <EditEventModal 
+        showModal={showEditModal} 
+        setShowModal={setShowEditModal}
+        eventData={selectedEvent}
+        onSubmit={handleUpdateEvent}
+        isSubmitting={editingEvent}
       />
     </Dashboard>
   );
