@@ -13,6 +13,7 @@ import CampaignCategories from "./donations/categories/CampaignCategories";
 import DonationHistory from "./donations/DonationHistoryPage";
 
 import ProposalManagementPage from "./proposal/ProposalPage";
+import EventManagementPage from "./event/EventManagementPage";
 import SoonDashboardPage from "./SoonDashboardPage";
 
 export {
@@ -28,4 +29,5 @@ export {
   CampaignPage,
   DonationHistory,
   ProposalManagementPage,
+  EventManagementPage,
 };

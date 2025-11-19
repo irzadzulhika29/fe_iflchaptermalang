@@ -1,6 +1,6 @@
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { programsData } from "../../../static/event/program/programData";
+// import { programsData } from "../../../static/event/program/programData";
 import TypingDots from "../../../components/chatbot/typingdots";
 import ChatHeader from "../../../components/chatbot/chatheader";
 import ChatComposer from "../../../components/chatbot/chatcomposer";
@@ -28,14 +28,16 @@ export default function Chatbot() {
             programFromState ||
             findProgram(slug) || {
                 title: "Program",
-                sdgNumber: "3",
-                date: "05/2025",
-                image:
-                    "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop",
+                sdgs: [{ code: "SDG3", name: "Good Health and Well-being" }],
+                start_date: "2025-05-01",
+                event_photo: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop",
+                description: "Program default",
+                event_activity: "Workshop, Diskusi",
+                participant: 0,
+                committee: 0
             },
         [programFromState, slug]
     );
-
     const flow = useMemo(() => programRegistrationFlow(program), [program]);
     const labels = useMemo(() => {
         const map = {};
