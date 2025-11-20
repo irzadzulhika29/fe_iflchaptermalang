@@ -38,7 +38,11 @@ const EditEventModal = ({
       setValue('participant', eventData.participant);
       setValue('price', eventData.price);
       setValue('committee', eventData.committee);
-      setValue('start_date', eventData.start_date);
+      
+    if (eventData.start_date) {
+      const dateValue = eventData.start_date.split('T')[0]; // Ambil bagian tanggal saja jika ada timestamp
+      setValue('start_date', dateValue);
+    }
 
       setStatus(eventData.status);
 
