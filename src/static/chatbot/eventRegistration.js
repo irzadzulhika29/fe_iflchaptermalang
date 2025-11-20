@@ -97,7 +97,7 @@ export const programRegistrationFlow = (program) => [
     text: "Kirim link Google Drive yang berisi SEMUA dokumen berikut:\n\n" +
       "1. Bukti Follow instagram @ifutureleaders_malang\n" +
       "2. Bukti share poster Open Recruitment Volunteer\n" +
-      "3. Bukti pembayaran Rp. 75.000\n\n" +
+      "3. Bukti pembayaran\n\n" +
       "Pastikan:\n" +
       "• Semua file sudah diupload dalam 1 folder Google Drive\n" +
       "• Akses diset: Anyone with the link can view\n" +
