@@ -113,17 +113,54 @@ export default function Chatbot() {
 
         submitRegistration(payload, {
             onSuccess: (data) => {
-                
-                if (data?.pricing?.has_discount) {
-                    successMsg += `Diskon: Rp ${parseInt(
-                        data?.pricing?.discount_amount || 0
-                    ).toLocaleString("id-ID")}\n`;
-                    successMsg += `Kode Referral: ${data?.pricing?.referral_code_used}\n`;
+                let successMsg = "🎉 PENDAFTARAN BERHASIL!\n\n";
+                successMsg += "━━━━━━━━━━━━━━━━━━━━━━\n\n";
+
+                // Registration Info
+                successMsg += "📋 INFORMASI PENDAFTARAN\n";
+                successMsg += `👤 Nama: ${data?.name || finalAnswers.name}\n`;
+                successMsg += `🎯 Event: ${program?.title || program?.event_name}\n`;
+
+                if (data?.registration_id) {
+                    successMsg += `🔖 ID Pendaftaran: ${data.registration_id}\n`;
                 }
 
-                successMsg += `\nStatus: ${data?.status === "pending" ? "Menunggu Pembayaran" : data?.status
-                    }\n`;
-                successMsg += `\nKami akan menghubungi kamu via WhatsApp untuk info selanjutnya. Terima kasih! 🙏`;
+                successMsg += "\n━━━━━━━━━━━━━━━━━━━━━━\n\n";
+
+                // Payment Info
+                successMsg += "💰 RINCIAN PEMBAYARAN\n";
+
+                const finalPriceValue = data?.pricing?.final_price || data?.final_price || finalPrice || originalPrice;
+                const originalPriceValue = data?.pricing?.original_price || originalPrice;
+
+                if (data?.pricing?.has_discount) {
+                    successMsg += `💵 Harga Normal: Rp ${parseInt(originalPriceValue).toLocaleString("id-ID")}\n`;
+                    successMsg += `🎁 Diskon: -Rp ${parseInt(
+                        data?.pricing?.discount_amount || 0
+                    ).toLocaleString("id-ID")}\n`;
+                    successMsg += `✨ Kode Referral: ${data?.pricing?.referral_code_used}\n`;
+                    successMsg += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+                    successMsg += `✅ Total Bayar: Rp ${parseInt(finalPriceValue).toLocaleString("id-ID")}\n`;
+                } else {
+                    successMsg += `✅ Total Bayar: Rp ${parseInt(finalPriceValue).toLocaleString("id-ID")}\n`;
+                }
+
+                successMsg += "\n━━━━━━━━━━━━━━━━━━━━━━\n\n";
+
+                // Status
+                const statusText = data?.status === "pending" ? "⏳ Menunggu Verifikasi Pembayaran" : `✨ ${data?.status}`;
+                successMsg += `📊 Status: ${statusText}\n\n`;
+
+                successMsg += "━━━━━━━━━━━━━━━━━━━━━━\n\n";
+
+                // Next Steps
+                successMsg += "📱 LANGKAH SELANJUTNYA\n";
+                successMsg += "• Tim kami akan menghubungi kamu via WhatsApp\n";
+                successMsg += "• Pastikan nomor WhatsApp kamu aktif\n";
+                successMsg += "• Cek email untuk konfirmasi pendaftaran\n\n";
+
+                successMsg += "Terima kasih sudah mendaftar! 🙏✨\n";
+                successMsg += "See you at the event! 🚀";
 
                 pushBot(successMsg);
 

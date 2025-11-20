@@ -11,6 +11,10 @@ const ProgramCard = ({ program, isActive }) => {
     const navigate = useNavigate();
     const [referralInfo, setReferralInfo] = useState(null);
 
+    // Check if user is authenticated
+    const token = localStorage.getItem("token");
+    const isAuthenticated = !!token;
+
     const isClosed = program.status?.toLowerCase() === 'closed';
 
     const handleReferralApplied = (data, code) => {
@@ -21,6 +25,13 @@ const ProgramCard = ({ program, isActive }) => {
         if (isClosed) {
             return;
         }
+
+        // Redirect to login if not authenticated
+        if (!isAuthenticated) {
+            navigate('/masuk');
+            return;
+        }
+
         navigate(`/chatbot/${program.slug || program.id}`, {
             state: {
                 program,
@@ -38,6 +49,7 @@ const ProgramCard = ({ program, isActive }) => {
             <ProgramImage
                 program={program}
                 isClosed={isClosed}
+                isAuthenticated={isAuthenticated}
                 onRegister={goChatbot}
             />
 
@@ -51,10 +63,12 @@ const ProgramCard = ({ program, isActive }) => {
                     <ProgramActivities program={program} />
                     <ProgramPrice
                         program={program}
+                        isAuthenticated={isAuthenticated}
                         onReferralApplied={handleReferralApplied}
                     />
                     <ProgramActions
                         isClosed={isClosed}
+                        isAuthenticated={isAuthenticated}
                         onRegister={goChatbot}
                     />
                 </div>

@@ -34,7 +34,7 @@ import {
   DetailBlogPage,
   DonationHistory,
   CampaignPage,
-  EditBlogPage,   
+  EditBlogPage,
   SoonDashboardPage,
   UserPage,
   ProposalManagementPage,
@@ -74,7 +74,7 @@ const ROLES = {
   bismar: "bismar",
   copywriter: "copywriter",
 };
- 
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -82,7 +82,6 @@ const App = () => {
       <Routes>
         <Route exact path="/" element={<HomePage />} />
         <Route path="/event" element={<EventPage />} />
-        <Route path="/chatbot/:slug" element={<ChatbotPage />} />
         <Route path="/project" element={<ProjectPage />} />
         <Route path="/tentang-kami" element={<AboutPage />} />
         <Route path="/nondept" element={<NondeptPage />} />
@@ -106,6 +105,7 @@ const App = () => {
         />
 
         <Route element={<ProtectedToken />}>
+          <Route path="/chatbot/:slug" element={<ChatbotPage />} />
           <Route path="/profil/:id" element={<ProfilePage />} />
 
           <Route element={<ProtectedDashboard />}>
@@ -113,9 +113,9 @@ const App = () => {
 
             <Route element={<ProtectedRoles allowedRoles={[ROLES.admin]} />}>
               <Route path="/admin/dashboard/user" element={<UserPage />} />
-              <Route 
-                path="/admin/dashboard/proposal" 
-                element={<ProposalManagementPage />} 
+              <Route
+                path="/admin/dashboard/proposal"
+                element={<ProposalManagementPage />}
               />
             </Route>
 
@@ -168,7 +168,7 @@ const App = () => {
                 element={<CampaignCategories />}
               />
               <Route
-              path="/admin/dashboard/donation/:slug"
+                path="/admin/dashboard/donation/:slug"
                 element={<DonationHistory />}
               />
             </Route>

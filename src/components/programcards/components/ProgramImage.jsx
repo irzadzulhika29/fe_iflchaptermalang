@@ -1,4 +1,4 @@
-export const ProgramImage = ({ program, isClosed, onRegister }) => {
+export const ProgramImage = ({ program, isClosed, isAuthenticated, onRegister }) => {
     const getSDGIcon = () => {
         if (program.sdgs && program.sdgs.length > 0) {
             const sdgCode = program.sdgs[0].code;
@@ -41,9 +41,12 @@ export const ProgramImage = ({ program, isClosed, onRegister }) => {
                     ) : (
                         <button
                             onClick={onRegister}
-                            className="bg-cyan-500 text-white px-5 py-2 rounded-full font-semibold text-sm sm:text-base hover:bg-cyan-600 transition-colors duration-200"
+                            className={`text-white px-5 py-2 rounded-full font-semibold text-sm sm:text-base transition-colors duration-200 ${!isAuthenticated
+                                ? 'bg-amber-500 hover:bg-amber-600'
+                                : 'bg-cyan-500 hover:bg-cyan-600'
+                                }`}
                         >
-                            Daftar Sekarang
+                            {!isAuthenticated ? 'Login dahulu' : 'Daftar Sekarang'}
                         </button>
                     )}
                 </div>
