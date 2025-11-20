@@ -36,8 +36,13 @@ const EditEventModal = ({
       setValue('description', eventData.description);
       setValue('event_activity', eventData.event_activity);
       setValue('participant', eventData.participant);
+      setValue('price', eventData.price);
       setValue('committee', eventData.committee);
-      setValue('start_date', eventData.start_date);
+      
+    if (eventData.start_date) {
+      const dateValue = eventData.start_date.split('T')[0]; // Ambil bagian tanggal saja jika ada timestamp
+      setValue('start_date', dateValue);
+    }
 
       setStatus(eventData.status);
 
@@ -112,6 +117,7 @@ const EditEventModal = ({
     formData.append('event_activity', data.event_activity);
     formData.append('participant', data.participant);
     formData.append('committee', data.committee);
+    formData.append('price', data.price);
     
     sdgs.forEach((sdgId, index) => {
       formData.append(`sdgs[${index}]`, sdgId);
@@ -256,6 +262,15 @@ const EditEventModal = ({
             register={register} 
             name="committee" 
             placeholder="Committee" 
+            type="number" 
+            min="0"
+            required
+            disabled={isSubmitting}
+          />
+          <Input 
+            register={register} 
+            name="price" 
+            placeholder="Harga" 
             type="number" 
             min="0"
             required

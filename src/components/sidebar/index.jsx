@@ -11,7 +11,11 @@ import { Article,File, CalendarDots, CaretDown, Folders, Gauge, HandCoins, Shopp
 import Icon from "../icon";
 
 export const ListMenu = [
-  { title: "Dashboard", links: [{ name: "IFL Malang", icon: <Gauge size={20} />, path: "/admin/dashboards" }] },
+  { title: "Dashboard", 
+    links: [
+      { name: "IFL Malang", icon: <Gauge size={20} />, path: "/admin/dashboards" },
+      { name: "Volunteer", icon: <User size={20} />, path: "/admin/dashboard/volunteer" },
+    ] },
   {
     title: "Secretary",
     links: [

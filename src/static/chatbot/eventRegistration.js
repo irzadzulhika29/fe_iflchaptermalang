@@ -2,13 +2,19 @@ export const programRegistrationFlow = (program) => [
   {
     id: "welcome",
     type: "bot",
-    text:
-      "Halo {User}! 👋\nSelamat datang di Program " +
-      (program?.title || "Program") +
-      ".\nTerima kasih sudah tertarik untuk bergabung! 🥳\n\n" +
-      "Sebelum melanjutkan, aku akan menanyakan beberapa data untuk keperluan administrasi pendaftaran ya. " +
-      "Silakan isi dengan benar agar proses seleksimu berjalan lancar.\n\n" +
-      "Yuk, kita mulai! (ketik **siap** kalau udah siap 😄)",
+    text: `Halo! 👋
+  Selamat datang di Program ${program?.title || "We Care Them (WCT) 2025"} - Indonesian Future Leaders Chapter Malang.
+  
+  Terima kasih sudah tertarik untuk bergabung sebagai volunteer! 🥳
+  
+  Info Penting:
+  • Volunteer maksimal: 13 Orang (otomatis ditutup portalnya)
+  • Early bird: 3 orang pertama (Rp65.000)
+  • Pendaftaran: 20 - 24 November 2025
+  
+  Sebelum melanjutkan, aku akan menanyakan beberapa data untuk keperluan administrasi pendaftaran ya. Silakan isi dengan benar agar proses seleksimu berjalan lancar.
+  
+  Yuk, kita mulai! (ketik "siap" kalau udah siap 😄)`,
     waitFor: "keyword",
     keyword: ["siap", "siapp", "siappp"],
   },
@@ -16,7 +22,7 @@ export const programRegistrationFlow = (program) => [
   {
     id: "ask_name",
     type: "ask",
-    key: "fullName",
+    key: "name",
     label: "Nama Lengkap",
     text: "Siapa nama lengkap kamu?",
   },
@@ -24,18 +30,18 @@ export const programRegistrationFlow = (program) => [
   {
     id: "ask_phone",
     type: "ask",
-    key: "whatsapp",
+    key: "phone_number",
     label: "Nomor WhatsApp",
-    text: "Nomor **WhatsApp** kamu berapa? (format: wa.me/62-xxxxxxxxxx)",
-    validation: "whatsapp",
+    text: "Nomor WhatsApp kamu berapa?\n\nContoh: 081234567890",
+    validation: "phone",
   },
 
   {
     id: "ask_guidebook",
     type: "ask",
     key: "hasReadGuidebook",
-    label: "Sudah membaca GuideBook Volunteer Close The Gap 2025",
-    text: "Sudah membaca **GuideBook Volunteer Close The Gap 2025**? (pilihan jawaban: **SUDAH** atau **BELUM**)",
+    label: `Sudah membaca GuideBook Volunteer ${program?.title || "We Care Them 2025"}`,
+    text: `Sudah membaca GuideBook Volunteer ${program?.title || "We Care Them 2025"}?\n\nLink GuideBook: https://drive.google.com/drive/folders/1-o9i_eap7yb_GmjzEbTumHATz07neN8y?usp=sharing\n\nPilihan jawaban: SUDAH atau BELUM`,
     options: ["SUDAH", "BELUM"],
   },
 
@@ -44,7 +50,7 @@ export const programRegistrationFlow = (program) => [
     type: "ask",
     key: "instagram",
     label: "Username Instagram",
-    text: "Username **Instagram** kamu apa? (format: instagram.com/username)",
+    text: "Username Instagram kamu apa?\n\nContoh: @username atau username",
     validation: "instagram",
   },
 
@@ -53,7 +59,7 @@ export const programRegistrationFlow = (program) => [
     type: "ask",
     key: "infoSource",
     label: "Tau informasi Indonesian Future Leaders dari mana?",
-    text: "Tau informasi **Indonesian Future Leaders** dari mana?\n\nPilihan:\na. Teman\nb. Instagram\nc. Story/Share Group\nd. Lain-lain",
+    text: "Tau informasi Indonesian Future Leaders dari mana?\n\nPilihan:\na. Teman\nb. Instagram\nc. Story/Share Group\nd. Lain-lain",
     options: ["Teman", "Instagram", "Story/Share Group", "Lain-lain"],
   },
 
@@ -61,8 +67,8 @@ export const programRegistrationFlow = (program) => [
     id: "ask_reason",
     type: "ask",
     key: "reason",
-    label: "Alasan ingin menjadi volunteer Close The Gap 2025",
-    text: "Apa **alasan** kamu ingin menjadi volunteer **Close The Gap 2025**?",
+    label: `Alasan ingin menjadi Volunteer ${program?.title || "We Care Them 2025"}`,
+    text: `Apa alasan kamu ingin menjadi volunteer ${program?.title || "We Care Them 2025"}?`,
   },
 
   {
@@ -70,34 +76,34 @@ export const programRegistrationFlow = (program) => [
     type: "ask",
     key: "experience",
     label: "Pengalaman yang berhubungan dengan volunteer",
-    text: "Boleh ceritakan **pengalaman** yang berhubungan dengan volunteer?",
+    text: "Boleh ceritakan pengalaman yang berhubungan dengan volunteer?",
   },
 
   {
-    id: "ask_follow_proof",
+    id: "payment_info",
     type: "ask",
-    key: "followProof",
-    label: "Bukti Follow instagram @ifutureleaders_malang",
-    text: "Upload **screenshot bukti Follow** instagram @ifutureleaders_malang atau kirim link postingan kamu.",
-    allowUpload: true,
+    key: "payment_status",
+    label: "Status Pembayaran",
+    text: "💰 Informasi Pembayaran\n\nSilakan lakukan pembayaran sesuai nominal dan metode di bawah ini.\n\nJika sudah transfer, silakan klik tombol SUDAH.",
+    options: ["SUDAH", "BELUM"],
+    showPayment: true,
   },
 
   {
-    id: "ask_share_proof",
+    id: "ask_proof_documents",
     type: "ask",
-    key: "shareProof",
-    label: "Bukti share poster Open Recruitment Volunteer",
-    text: "Upload **screenshot bukti share poster** Open Recruitment Volunteer Close The Gap 2025 atau kirim link postingan.",
-    allowUpload: true,
-  },
-
-  {
-    id: "ask_payment",
-    type: "ask",
-    key: "paymentProof",
-    label: "Bukti Pembayaran sebesar Rp. 65.000",
-    text: "Upload **bukti transfer** sebesar **Rp. 65.000** (screenshot/foto).",
-    allowUpload: true,
+    key: "proofDocuments",
+    label: "Link Google Drive untuk semua bukti dokumen",
+    text: "Kirim link Google Drive yang berisi SEMUA dokumen berikut:\n\n" +
+      "1. Bukti Follow instagram @ifutureleaders_malang\n" +
+      "2. Bukti share poster Open Recruitment Volunteer\n" +
+      "3. Bukti pembayaran\n\n" +
+      "Pastikan:\n" +
+      "• Semua file sudah diupload dalam 1 folder Google Drive\n" +
+      "• Akses diset: Anyone with the link can view\n" +
+      "• Link berbentuk: drive.google.com/drive/folders/xxxxx\n\n" +
+      "Kirim link folder Google Drive kamu:",
+    validation: "url",
   },
 
   {
@@ -105,13 +111,15 @@ export const programRegistrationFlow = (program) => [
     type: "ask",
     key: "commitment",
     label: "Siap mengikuti dan berkomitmen untuk serangkaian acara",
-    text: "Siap mengikuti dan berkomitmen untuk serangkaian acara dari awal hingga akhir? (pilihan jawaban: **SIAP** dan **BELUM SIAP**)",
+    text: "Siap mengikuti dan berkomitmen untuk serangkaian acara dari awal hingga akhir?\n\nPilihan jawaban: SIAP dan BELUM SIAP",
     options: ["SIAP", "BELUM SIAP"],
   },
 
   {
     id: "hint_done",
     type: "bot",
-    text: 'Datanya udah masuk semua. Ketik **"udah"** buat lihat rekap sebelum dikirim. 😉',
+    text: 'Datanya udah masuk semua. Ketik "udah" buat lihat rekap sebelum dikirim. 😉',
+    waitFor: "keyword",
+    keyword: ["udah"],
   },
 ];

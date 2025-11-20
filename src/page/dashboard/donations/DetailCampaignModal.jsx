@@ -15,7 +15,6 @@ const DetailCampaignModal = ({ slug }) => {
   const [showModal, setShowModal] = useState(false);
 
   const { data: dataCampaign, isLoading } = useGetCampaignBySlug(slug);
-  console.log('dataCampaign', dataCampaign);
   const detailInfo = (key, value) => {
     return (
       <div className="flex text-sm font-medium text-dark-1">

@@ -5,7 +5,6 @@ import Image from "../../components/image";
 const Programs = () => {
   return (
     <Container>
-      {/* Heading Section */}
       <div className="flex flex-col items-center gap-2">
         <h2 className="text-3xl sm:text-4xl font-bold tracking-wide text-primary-1">
           Program Kerja
@@ -13,11 +12,8 @@ const Programs = () => {
         <div className="w-52 sm:w-60 h-1 bg-primary-1"></div>
       </div>
 
-      {/* Programs Section */}
       <div className="flex flex-col items-center gap-16 mt-12">
-        {/* Programs */}
         <div className="relative flex flex-col md:flex-row items-center gap-6 md:gap-12">
-          {/* Background Decorative */}
           <div className="absolute -z-10 bg-primary-1 rounded-full w-40 h-40 sm:w-56 sm:h-56 opacity-10 top-1/2 -translate-y-1/2 md:left-0"></div>
 
           <Image
@@ -42,9 +38,7 @@ const Programs = () => {
           </div>
         </div>
 
-        {/* Projects */}
         <div className="relative flex flex-col-reverse md:flex-row items-center gap-6 md:gap-12">
-          {/* Background Decorative */}
           <div className="absolute -z-10 bg-primary-1 rounded-full w-40 h-40 sm:w-56 sm:h-56 opacity-10 top-1/2 -translate-y-1/2 md:right-0"></div>
 
           <div className="flex flex-col gap-4 px-4 md:pr-8">

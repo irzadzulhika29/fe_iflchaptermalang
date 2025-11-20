@@ -10,17 +10,9 @@ export const headerSlidesProgram = [
     },
     {
         id: 2,
-        title: "We Care program",
+        title: "Close The Gap",
         description:
-            "Salah satu program IFL Chapter Malang berfokus pada isu down syndrome di Kota Malang",
-        image:
-            "https://ik.imagekit.io/iflmalang/constant-image/program2?updatedAt=1744995069847",
-    },
-    {
-        id: 3,
-        title: "We Care program",
-        description:
-            "Salah satu program IFL Chapter Malang berfokus pada isu down syndrome di Kota Malang",
+            "Salah satu program IFL Chapter Malang berfokus pada anak-anak penderita kanker",
         image:
             "https://ik.imagekit.io/iflmalang/constant-image/program-pic.webp?updatedAt=1720372205829",
     },
@@ -37,13 +29,9 @@ export const headerSlidesProject = [
     },
     {
         id: 2,
-        title: "We Care projek",
-        image:
-            "https://ik.imagekit.io/iflmalang/constant-image/program2?updatedAt=1744995069847",
-    },
-    {
-        id: 3,
-        title: "projek",
+        title: "Close The Gap",
+        description:
+            "Salah satu program IFL Chapter Malang berfokus pada anak-anak penderita kanker",
         image:
             "https://ik.imagekit.io/iflmalang/constant-image/program-pic.webp?updatedAt=1720372205829",
     },
