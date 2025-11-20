@@ -1,10 +1,11 @@
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import { useMemo, useEffect } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { programsData } from "../../../static/event/program/programData";
 import { programRegistrationFlow } from "../../../static/chatbot/eventRegistration";
 import { useRegisterVolunteer } from "../../../features/volunteer/services";
 import { useChatFlow } from "../../../features/volunteer/hooks/useChatFlow";
 import ChatContainer from "../../../components/chatbot/chatcontainer";
+import SuccessModal from "../../../components/chatbot/successmodal";
 import { isValidPhoneNumber, isValidInstagram } from "../../../utils/chatbot/formatter";
 
 const findProgram = (slugOrId) =>
@@ -18,6 +19,9 @@ export default function Chatbot() {
     const programFromState = state?.program;
     const finalPrice = state?.finalPrice;
     const originalPrice = programFromState?.price || 75000;
+
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [registrationData, setRegistrationData] = useState(null);
 
     const program = useMemo(
         () =>
@@ -113,58 +117,20 @@ export default function Chatbot() {
 
         submitRegistration(payload, {
             onSuccess: (data) => {
-                let successMsg = "🎉 PENDAFTARAN BERHASIL!\n\n";
-                successMsg += "━━━━━━━━━━━━━━━━━━━━━━\n\n";
+                // Store registration data for modal
+                setRegistrationData({
+                    name: data?.name || finalAnswers.name,
+                    registration_id: data?.registration_id,
+                    event_name: program?.title || program?.event_name,
+                });
 
-                // Registration Info
-                successMsg += "📋 INFORMASI PENDAFTARAN\n";
-                successMsg += `👤 Nama: ${data?.name || finalAnswers.name}\n`;
-                successMsg += `🎯 Event: ${program?.title || program?.event_name}\n`;
+                // Show success message in chat
+                pushBot("🎉 Pendaftaran berhasil! Silakan cek popup untuk langkah selanjutnya.");
 
-                if (data?.registration_id) {
-                    successMsg += `🔖 ID Pendaftaran: ${data.registration_id}\n`;
-                }
-
-                successMsg += "\n━━━━━━━━━━━━━━━━━━━━━━\n\n";
-
-                // Payment Info
-                successMsg += "💰 RINCIAN PEMBAYARAN\n";
-
-                const finalPriceValue = data?.pricing?.final_price || data?.final_price || finalPrice || originalPrice;
-                const originalPriceValue = data?.pricing?.original_price || originalPrice;
-
-                if (data?.pricing?.has_discount) {
-                    successMsg += `💵 Harga Normal: Rp ${parseInt(originalPriceValue).toLocaleString("id-ID")}\n`;
-                    successMsg += `🎁 Diskon: -Rp ${parseInt(
-                        data?.pricing?.discount_amount || 0
-                    ).toLocaleString("id-ID")}\n`;
-                    successMsg += `✨ Kode Referral: ${data?.pricing?.referral_code_used}\n`;
-                    successMsg += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-                    successMsg += `✅ Total Bayar: Rp ${parseInt(finalPriceValue).toLocaleString("id-ID")}\n`;
-                } else {
-                    successMsg += `✅ Total Bayar: Rp ${parseInt(finalPriceValue).toLocaleString("id-ID")}\n`;
-                }
-
-                successMsg += "\n━━━━━━━━━━━━━━━━━━━━━━\n\n";
-
-                // Status
-                const statusText = data?.status === "pending" ? "⏳ Menunggu Verifikasi Pembayaran" : `✨ ${data?.status}`;
-                successMsg += `📊 Status: ${statusText}\n\n`;
-
-                successMsg += "━━━━━━━━━━━━━━━━━━━━━━\n\n";
-
-                // Next Steps
-                successMsg += "📱 LANGKAH SELANJUTNYA\n";
-                successMsg += "• Tim kami akan menghubungi kamu via WhatsApp\n";
-                successMsg += "• Pastikan nomor WhatsApp kamu aktif\n";
-                successMsg += "• Cek email untuk konfirmasi pendaftaran\n\n";
-
-                successMsg += "Terima kasih sudah mendaftar! 🙏✨\n";
-                successMsg += "See you at the event! 🚀";
-
-                pushBot(successMsg);
-
-                setTimeout(() => navigate("/"), 5000);
+                // Show success modal
+                setTimeout(() => {
+                    setShowSuccessModal(true);
+                }, 500);
             },
             onError: (error) => {
                 console.error("Registration error:", error);
@@ -196,29 +162,36 @@ export default function Chatbot() {
     };
 
     return (
-        <ChatContainer
-            program={program}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-            messages={messages}
-            isTyping={isTyping}
-            showSummary={showSummary}
-            validationState={validationState}
-            currentOptions={currentOptions}
-            answers={answers}
-            labels={labels}
-            input={input}
-            isSubmitting={isSubmitting}
-            onBack={() => navigate(-1)}
-            onInputChange={handleInputChange}
-            onSend={handleSend}
-            onQuickReply={handleQuickReply}
-            onConfirm={handleConfirm}
-            onEdit={handleEdit}
-            flow={flow}
-            flowIndex={flowIndex}
-            finalPrice={finalPrice}
-            originalPrice={originalPrice}
-        />
+        <>
+            <ChatContainer
+                program={program}
+                currentStep={currentStep}
+                totalSteps={totalSteps}
+                messages={messages}
+                isTyping={isTyping}
+                showSummary={showSummary}
+                validationState={validationState}
+                currentOptions={currentOptions}
+                answers={answers}
+                labels={labels}
+                input={input}
+                isSubmitting={isSubmitting}
+                onBack={() => navigate(-1)}
+                onInputChange={handleInputChange}
+                onSend={handleSend}
+                onQuickReply={handleQuickReply}
+                onConfirm={handleConfirm}
+                onEdit={handleEdit}
+                flow={flow}
+                flowIndex={flowIndex}
+                finalPrice={finalPrice}
+                originalPrice={originalPrice}
+            />
+            <SuccessModal
+                isOpen={showSuccessModal}
+                onClose={() => setShowSuccessModal(false)}
+                registrationData={registrationData}
+            />
+        </>
     );
 }
