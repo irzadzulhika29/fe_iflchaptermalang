@@ -20,18 +20,29 @@ export const ProgramImage = ({ program, isClosed, isAuthenticated, onRegister })
     return program.sdgNumber || "-";
   };
 
+  const imageUrl = program.event_photo || program.image || "https://via.placeholder.com/400x300";
+
   return (
     <div className="w-full md:w-2/5 lg:w-1/3 relative group">
       <div className="relative w-full h-64 sm:h-80 md:h-full overflow-hidden rounded-l-3xl">
-        <img
-          src={
-            program.event_photo ||
-            program.image ||
-            "https://via.placeholder.com/400x300"
-          }
-          alt={program.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-        />
+        {/* Grid 3 gambar kolase */}
+        <div className="grid grid-rows-3 h-full">
+          <img
+            src={imageUrl}
+            alt={program.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+          <img
+            src={imageUrl}
+            alt={program.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+          <img
+            src={imageUrl}
+            alt={program.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+        </div>
 
         {!isClosed && (
           <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
