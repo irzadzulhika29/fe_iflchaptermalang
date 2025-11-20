@@ -118,7 +118,7 @@ export const programRegistrationFlow = (program) => [
   {
     id: "hint_done",
     type: "bot",
-    text: 'Datanya udah masuk semua. Ketik "udah" buat lihat rekap sebelum dikirim. 😉',
+    text: 'Datanya udah masuk semua. Ketik "SIAP" buat lihat rekap sebelum dikirim. 😉',
     waitFor: "keyword",
     keyword: ["udah"],
   },

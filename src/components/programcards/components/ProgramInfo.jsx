@@ -69,7 +69,7 @@ export const ProgramInfo = ({ program }) => {
                 Supports SDGs No. {getSDGNumbers()}
             </div>
 
-            <div className="text-gray-800 text-sm sm:text-base mb-4 sm:mb-6">
+            <div className="mb-5 text-gray-800 text-sm sm:text-base line-clamp-7 h-[168px] overflow-hidden">
                 {program.description}
             </div>
         </div>
