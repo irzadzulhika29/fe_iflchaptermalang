@@ -12,11 +12,11 @@ const EventSection = () => {
     const [activeSlide, setActiveSlide] = useState(0);
 
     const { data: eventsFromApi, isLoading } = useGetAllEvents();
-    
+
     const programEvents = eventsFromApi?.filter(
         event => event.category?.toLowerCase() === 'program'
     ) || [];
-    
+
     const projectEvents = eventsFromApi?.filter(
         event => event.category?.toLowerCase() === 'project'
     ) || [];
@@ -46,58 +46,110 @@ const EventSection = () => {
     return (
         <>
             <section
-                className="relative bg-cyan-500 text-white"
+                className="relative bg-gradient-to-br from-cyan-600 via-cyan-500 to-blue-600 text-white overflow-hidden"
                 aria-label="Event highlights"
                 onMouseEnter={() => (isPausedRef.current = true)}
                 onMouseLeave={() => (isPausedRef.current = false)}
             >
+                {/* Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute inset-0" style={{
+                        backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+                        backgroundSize: '40px 40px'
+                    }} />
+                </div>
+
+                {/* Slides Container */}
                 <div className="absolute inset-0 z-0 pointer-events-none">
                     {slides.map((slide, index) => (
                         <div
                             key={slide.id ?? index}
-                            className={`absolute inset-0 transition-opacity duration-1000 ${activeSlide === index ? "opacity-100" : "opacity-0"
+                            className={`absolute inset-0 transition-all duration-1000 ${activeSlide === index ? "opacity-100 scale-100" : "opacity-0 scale-105"
                                 }`}
                             aria-hidden={activeSlide !== index}
                         >
                             <img
                                 src={slide.image}
                                 alt={slide.title || `Slide ${index + 1}`}
-                                className="w-full h-full object-cover opacity-30 absolute"
+                                className="w-full h-full object-cover absolute"
                                 loading={index === 0 ? "eager" : "lazy"}
                                 decoding="async"
                             />
-                            <div className="w-full flex flex-col justify-center items-start h-full px-16 mt-20">
-                                {slide.title ? (
-                                    <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold">
-                                        {slide.title}
-                                    </h1>
-                                ) : null}
-                                {slide.description ? (
-                                    <p className="text-sm sm:text-base lg:text-lg font-normal line-clamp-2 w-full">
-                                        {slide.description}
-                                    </p>
-                                ) : null}
+                            {/* Multi-layer Gradient Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+
+                            {/* Content */}
+                            <div className="w-full flex flex-col justify-center items-start h-full px-8 sm:px-12 md:px-16 lg:px-24 relative z-10">
+                                <div className="max-w-3xl space-y-4 sm:space-y-6">
+                                    {slide.title ? (
+                                        <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold leading-tight animate-in slide-in-from-left duration-700"
+                                            style={{ textShadow: '2px 4px 8px rgba(0,0,0,0.3)' }}>
+                                            {slide.title}
+                                        </h1>
+                                    ) : null}
+                                    {slide.description ? (
+                                        <p className="text-base sm:text-lg lg:text-xl font-light leading-relaxed max-w-2xl animate-in slide-in-from-left duration-700 delay-150"
+                                            style={{ textShadow: '1px 2px 4px rgba(0,0,0,0.3)' }}>
+                                            {slide.description}
+                                        </p>
+                                    ) : null}
+                                    {/* Decorative Line */}
+                                    <div className="w-24 h-1 bg-white/80 rounded-full animate-in slide-in-from-left duration-700 delay-300" />
+                                </div>
                             </div>
                         </div>
                     ))}
                 </div>
 
+                {/* Aspect Ratio Spacer */}
                 <div className="relative z-0 pointer-events-none">
                     <div className="aspect-[16/7] w-full" />
                 </div>
 
-                <div className="absolute bottom-8 left-0 right-0 z-20 ">
-                    <div className="flex justify-center gap-2 relative z-30">
+                {/* Navigation Arrows */}
+                <button
+                    onClick={() => setActiveSlide(prev => prev === 0 ? slides.length - 1 : prev - 1)}
+                    className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-30 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 sm:p-4 rounded-full transition-all duration-300 hover:scale-110 group"
+                    aria-label="Previous slide"
+                    type="button"
+                >
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button
+                    onClick={() => setActiveSlide(prev => prev === slides.length - 1 ? 0 : prev + 1)}
+                    className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-30 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 sm:p-4 rounded-full transition-all duration-300 hover:scale-110 group"
+                    aria-label="Next slide"
+                    type="button"
+                >
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+
+                {/* Modern Slide Indicators */}
+                <div className="absolute bottom-6 sm:bottom-8 left-0 right-0 z-20">
+                    <div className="flex justify-center gap-2 sm:gap-3 relative z-30">
                         {slides.map((_, index) => (
                             <button
                                 key={index}
                                 onClick={() => setActiveSlide(index)}
-                                className={`h-3 rounded-full transition-all ${activeSlide === index ? "bg-white w-6" : "bg-white/50 w-3"
+                                className={`group relative transition-all duration-300 ${activeSlide === index ? "w-12 sm:w-16" : "w-3 sm:w-4"
                                     }`}
                                 aria-label={`Slide ${index + 1}`}
                                 aria-current={activeSlide === index ? "true" : "false"}
                                 type="button"
-                            />
+                            >
+                                <div className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${activeSlide === index
+                                    ? "bg-white shadow-lg shadow-white/50"
+                                    : "bg-white/40 hover:bg-white/60"
+                                    }`} />
+                                {activeSlide === index && (
+                                    <div className="absolute inset-0 bg-white/30 rounded-full blur-sm animate-pulse" />
+                                )}
+                            </button>
                         ))}
                     </div>
                 </div>

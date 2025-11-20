@@ -7,4 +7,9 @@ export const referralAPI = {
         });
         return response.data;
     },
+
+    getReferralCodes: async (eventId) => {
+        const response = await API.get(`/volunteer/events/${eventId}/referral-codes`);
+        return response.data;
+    },
 };
