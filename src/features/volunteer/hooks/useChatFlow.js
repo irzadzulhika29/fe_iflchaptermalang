@@ -70,14 +70,12 @@ export const useChatFlow = (flow) => {
   }, [flow, pushBot]);
 
   const goNextAsk = useCallback(() => {
-    const nextIndex = flow.findIndex((s, i) => i > flowIndex && s.type === "ask");
-    if (nextIndex !== -1) {
+    // Find the next step index
+    const nextIndex = flowIndex + 1;
+    if (flow[nextIndex]) {
       runStep(nextIndex);
-    } else {
-      const hint = flow.find((s) => s.id === "hint_done");
-      if (hint) pushBot(hint.text);
     }
-  }, [flow, flowIndex, pushBot, runStep]);
+  }, [flow, flowIndex, runStep]);
 
   const handleInputChange = useCallback((value) => {
     setInput(value);
@@ -98,12 +96,22 @@ export const useChatFlow = (flow) => {
     const step = flow[flowIndex];
 
     if (step?.waitFor === "keyword") {
-      const bag = (step.keyword || []).map((k) => k.toLowerCase());
+      const keywords = Array.isArray(step.keyword) ? step.keyword : [step.keyword];
+      const bag = keywords.map((k) => k.toLowerCase());
+
       if (bag.includes(v.toLowerCase())) {
+        if (v.toLowerCase() === "udah") {
+          setShowSummary(true);
+          return;
+        }
         const nextIndex = flowIndex + 1;
         if (flow[nextIndex]) runStep(nextIndex);
       } else {
-        pushBot('Ketik "siap" dulu ya kalau kamu udah ready 😄');
+        if (step.id === 'welcome') {
+          pushBot('Ketik "siap" dulu ya kalau kamu udah ready 😄');
+        } else {
+          pushBot(`Ketik "${keywords[0]}" untuk melanjutkan.`);
+        }
       }
       return;
     }

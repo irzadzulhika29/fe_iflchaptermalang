@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useValidateReferralCode } from "../../../features/volunteer";
 
-export const ProgramPrice = ({ program, onReferralApplied }) => {
+export const ProgramPrice = ({ program, onReferralApplied, isAuthenticated }) => {
     const [referralCode, setReferralCode] = useState("");
     const [referralData, setReferralData] = useState(null);
     const [referralError, setReferralError] = useState("");
@@ -10,6 +10,8 @@ export const ProgramPrice = ({ program, onReferralApplied }) => {
 
     // Load saved referral data on mount
     useEffect(() => {
+        if (!isAuthenticated) return; // Only load if authenticated
+
         const savedData = localStorage.getItem(`referral_${program.id}`);
         if (savedData) {
             try {
@@ -21,7 +23,7 @@ export const ProgramPrice = ({ program, onReferralApplied }) => {
                 console.error('Failed to load referral data:', error);
             }
         }
-    }, [program.id]);
+    }, [program.id, isAuthenticated]);
 
     const handleValidateReferral = async () => {
         if (!referralCode.trim()) return;
@@ -77,35 +79,37 @@ export const ProgramPrice = ({ program, onReferralApplied }) => {
                 </div>
             </div>
 
-            {/* Referral Code Input */}
-            <div className="mt-3 pt-3 border-t border-cyan-100">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Punya Kode Referral?</label>
-                <div className="flex gap-2">
-                    <input
-                        type="text"
-                        value={referralCode}
-                        onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-                        placeholder="Masukkan kode"
-                        disabled={referralData !== null}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:bg-gray-100"
-                    />
-                    <button
-                        onClick={handleValidateReferral}
-                        disabled={!referralCode.trim() || validateReferral.isPending || referralData !== null}
-                        className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-                    >
-                        {validateReferral.isPending ? 'Cek...' : referralData ? '✓' : 'Cek'}
-                    </button>
-                </div>
-                {referralError && (
-                    <p className="mt-2 text-sm text-red-600">{referralError}</p>
-                )}
-                {referralData && (
-                    <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg">
-                        <p className="text-sm text-green-700">✓ {referralData.description}</p>
+            {/* Referral Code Input - Only show if authenticated */}
+            {isAuthenticated && (
+                <div className="mt-3 pt-3 border-t border-cyan-100">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Punya Kode Referral?</label>
+                    <div className="flex gap-2">
+                        <input
+                            type="text"
+                            value={referralCode}
+                            onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+                            placeholder="Masukkan kode"
+                            disabled={referralData !== null}
+                            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:bg-gray-100"
+                        />
+                        <button
+                            onClick={handleValidateReferral}
+                            disabled={!referralCode.trim() || validateReferral.isPending || referralData !== null}
+                            className="px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                        >
+                            {validateReferral.isPending ? 'Cek...' : referralData ? '✓' : 'Cek'}
+                        </button>
                     </div>
-                )}
-            </div>
+                    {referralError && (
+                        <p className="mt-2 text-sm text-red-600">{referralError}</p>
+                    )}
+                    {referralData && (
+                        <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-lg">
+                            <p className="text-sm text-green-700">✓ {referralData.description}</p>
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 };
