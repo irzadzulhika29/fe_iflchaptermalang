@@ -104,12 +104,16 @@ const Footer = () => {
                 <li className="flex flex-col items-center md:flex-row md:items-start md:space-x-2">
                   <img src={emailIcon} alt="Email" className="h-6 w-6" />
                   <span className="mt-2 md:mt-0">
-                    iflchaptermalang@gmail.com
+                    <a href="mailto:partnershipiflmalang@gmail.com">
+                      partnershipiflmalang@gmail.com
+                    </a>
                   </span>
                 </li>
                 <li className="flex flex-col items-center md:flex-row md:items-start md:space-x-2">
                   <img src={phoneIcon} alt="Phone" className="h-6 w-6" />
-                  <span className="mt-2 md:mt-0">+6281210499440</span>
+                  <span className="mt-2 md:mt-0">
+                    <a href="https://wa.me/+6282132715618">+62 821-3271-5618</a>
+                  </span>
                 </li>
               </ul>
             </div>
