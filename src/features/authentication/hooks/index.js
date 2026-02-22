@@ -18,7 +18,11 @@ export const register = async (body) => {
 export const login = async (body) => {
   return await API.post("/auth/login", body)
     .then((response) => {
-      localStorage.setItem("token", response.data?.data?.token?.token?.access_token);
+      console.log("[login] response.data:", response.data);
+      console.log("[login] response.data type:", typeof response.data);
+      const token = response.data?.data?.token?.token?.access_token;
+      console.log("[login] token extracted:", token);
+      localStorage.setItem("token", token);
       SweatAlert(response.data?.message, "success");
       reloadPage(2200, "/");
     })

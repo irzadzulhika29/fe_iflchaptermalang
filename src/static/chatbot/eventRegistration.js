@@ -3,14 +3,17 @@ export const programRegistrationFlow = (program) => [
     id: "welcome",
     type: "bot",
     text: `Halo! 👋
-  Selamat datang di Program ${program?.title || "We Care Them (WCT) 2025"} - Indonesian Future Leaders Chapter Malang.
+  Selamat datang di Program ${
+    program?.title || "We Care Them (WCT) 2025"
+  } - Indonesian Future Leaders Chapter Malang.
   
   Terima kasih sudah tertarik untuk bergabung sebagai volunteer! 🥳
   
   Info Penting:
-  • Volunteer maksimal: 13 Orang (otomatis ditutup portalnya)
-  • Early bird: 3 orang pertama (Rp65.000)
-  • Pendaftaran: 20 - 24 November 2025
+  • Volunteer maksimal: ${
+    program?.participant || "12"
+  } Orang (otomatis ditutup portalnya)
+  • Pendaftaran: 25 November - 1 Desember 2025
   
   Sebelum melanjutkan, aku akan menanyakan beberapa data untuk keperluan administrasi pendaftaran ya. Silakan isi dengan benar agar proses seleksimu berjalan lancar.
   
@@ -40,8 +43,12 @@ export const programRegistrationFlow = (program) => [
     id: "ask_guidebook",
     type: "ask",
     key: "hasReadGuidebook",
-    label: `Sudah membaca GuideBook Volunteer ${program?.title || "We Care Them 2025"}`,
-    text: `Sudah membaca GuideBook Volunteer ${program?.title || "We Care Them 2025"}?\n\nLink GuideBook: https://drive.google.com/drive/folders/1-o9i_eap7yb_GmjzEbTumHATz07neN8y?usp=sharing\n\nPilihan jawaban: SUDAH atau BELUM`,
+    label: `Sudah membaca GuideBook Volunteer ${
+      program?.title || "We Care Them 2025"
+    }`,
+    text: `Sudah membaca GuideBook Volunteer ${
+      program?.title || "We Care Them 2025"
+    }?\n\nLink GuideBook: https://drive.google.com/drive/folders/1bEgPvx1aV1BKPSytjOwEFtVZt7FtVrNv?usp=sharing\n\nPilihan jawaban: SUDAH atau BELUM`,
     options: ["SUDAH", "BELUM"],
   },
 
@@ -67,8 +74,12 @@ export const programRegistrationFlow = (program) => [
     id: "ask_reason",
     type: "ask",
     key: "reason",
-    label: `Alasan ingin menjadi Volunteer ${program?.title || "We Care Them 2025"}`,
-    text: `Apa alasan kamu ingin menjadi volunteer ${program?.title || "We Care Them 2025"}?`,
+    label: `Alasan ingin menjadi Volunteer ${
+      program?.title || "We Care Them 2025"
+    }`,
+    text: `Apa alasan kamu ingin menjadi volunteer ${
+      program?.title || "We Care Them 2025"
+    }?`,
   },
 
   {
@@ -94,7 +105,8 @@ export const programRegistrationFlow = (program) => [
     type: "ask",
     key: "proofDocuments",
     label: "Link Google Drive untuk semua bukti dokumen",
-    text: "Kirim link Google Drive yang berisi SEMUA dokumen berikut:\n\n" +
+    text:
+      "Kirim link Google Drive yang berisi SEMUA dokumen berikut:\n\n" +
       "1. Bukti Follow instagram @ifutureleaders_malang\n" +
       "2. Bukti share poster Open Recruitment Volunteer\n" +
       "3. Bukti pembayaran\n\n" +

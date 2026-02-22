@@ -9,7 +9,7 @@ const SuccessModal = ({ isOpen, onClose, registrationData }) => {
         navigate("/");
     };
 
-    const whatsappLink = "https://chat.whatsapp.com/FFphdg7E9evLLmTsIE9jiY?mode=hqrc";
+    const whatsappLink = "https://chat.whatsapp.com/LSXypo65g9C8MJoP1N5IJF?mode=hqrt3";
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
