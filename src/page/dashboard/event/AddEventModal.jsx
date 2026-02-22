@@ -91,6 +91,7 @@ const AddEventModal = ({
     formData.append('participant', data.participant);
     formData.append('committee', data.committee); 
     formData.append('price', data.price || 0);
+    formData.append('proposal_link', data.proposal_link || '');
     
     sdgs.forEach((sdgId, index) => {
       formData.append(`sdgs[${index}]`, sdgId);
@@ -233,6 +234,14 @@ const AddEventModal = ({
             type="number" 
             min="0"
             required
+            disabled={isSubmitting}
+          />
+
+          <Input 
+            register={register} 
+            name="proposal_link" 
+            placeholder="Proposal Link" 
+            type="url"
             disabled={isSubmitting}
           />
 

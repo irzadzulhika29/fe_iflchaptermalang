@@ -38,6 +38,7 @@ const EditEventModal = ({
       setValue('participant', eventData.participant);
       setValue('price', eventData.price);
       setValue('committee', eventData.committee);
+      setValue('proposal_link', eventData.proposal_link);
       
     if (eventData.start_date) {
       const dateValue = eventData.start_date.split('T')[0]; // Ambil bagian tanggal saja jika ada timestamp
@@ -118,6 +119,7 @@ const EditEventModal = ({
     formData.append('participant', data.participant);
     formData.append('committee', data.committee);
     formData.append('price', data.price);
+    formData.append('proposal_link', data.proposal_link || '');
     
     sdgs.forEach((sdgId, index) => {
       formData.append(`sdgs[${index}]`, sdgId);
@@ -274,6 +276,14 @@ const EditEventModal = ({
             type="number" 
             min="0"
             required
+            disabled={isSubmitting}
+          />
+
+          <Input 
+            register={register} 
+            name="proposal_link" 
+            placeholder="Proposal Link" 
+            type="url"
             disabled={isSubmitting}
           />
 
