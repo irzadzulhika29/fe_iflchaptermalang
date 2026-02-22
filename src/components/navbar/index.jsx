@@ -24,7 +24,6 @@ const navList = [
   { title: "Article", path: "/artikel" },
   { title: "Catalog", path: "/#shop" },
   { title: "Donate", path: "/donasi" },
-  { title: "Proposal", path: "/proposal" },
   // { title: "Program", path: "/program" },
 ];
 

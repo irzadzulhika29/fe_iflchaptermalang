@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import Modal from "react-responsive-modal";
 
-import { Trash } from "@phosphor-icons/react/dist/ssr/Trash";
+import { Trash } from "@phosphor-icons/react";
 
 import Loading from "../../../components/loader";
 import { Button } from "../../../components/button";

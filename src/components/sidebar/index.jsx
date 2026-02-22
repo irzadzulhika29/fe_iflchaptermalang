@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 import { logo_text } from "../../assets/icons";
 
-import { Article,File, CalendarDots, CaretDown, Folders, Gauge, HandCoins, ShoppingBag, User } from "@phosphor-icons/react";
+import { Article, CalendarDots, CaretDown, Folders, Gauge, HandCoins, ShoppingBag, User } from "@phosphor-icons/react";
 
 import Icon from "../icon";
 
@@ -16,12 +16,6 @@ export const ListMenu = [
       { name: "IFL Malang", icon: <Gauge size={20} />, path: "/admin/dashboards" },
       { name: "Volunteer", icon: <User size={20} />, path: "/admin/dashboard/volunteer" },
     ] },
-  {
-    title: "Secretary",
-    links: [
-      { name: "Proposal", icon: <File size={20} />, path: "/admin/dashboard/proposal" },
-    ],
-  },
   {
     title: "DPP",
     links: [
