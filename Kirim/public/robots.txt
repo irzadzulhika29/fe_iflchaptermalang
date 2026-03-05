@@ -1,9 +1,0 @@
-User-agent: *
-Allow: /
-Allow: /program
-Allow: /project
-Allow: /tentang-kami
-Allow: /donasi
-Allow: /artikel
-Allow: /masuk
-Allow: /daftar
