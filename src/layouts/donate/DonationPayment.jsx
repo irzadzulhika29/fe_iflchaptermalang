@@ -6,8 +6,8 @@ import { Button } from "../../components/button";
 import Container from "../../components/container";
 import Loading from "../../components/loader";
 import API from "../../libs/api";
-import qrisCloseTheGap from "../../assets/image/donation/qrs_donasi.jpg";
-import qrisWeCareThem from "../../assets/image/donation/qris_wct.png";
+import qrisCloseTheGap from "../../assets/image/donation/qris.jpeg";
+import qrisWeCareThem from "../../assets/image/donation/qris.jpeg";
 import { addDonationWithQRIS } from "../../features/donation/hooks";
 
 const QRISDisplay = ({ campaignTitle }) => {
