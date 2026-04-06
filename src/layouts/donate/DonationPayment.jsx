@@ -6,8 +6,9 @@ import { Button } from "../../components/button";
 import Container from "../../components/container";
 import Loading from "../../components/loader";
 import API from "../../libs/api";
-import qrisCloseTheGap from "../../assets/image/donation/qrs_donasi.jpg";
-import qrisWeCareThem from "../../assets/image/donation/qris_wct.png";
+import qrisCloseTheGap from "../../assets/image/donation/qris.jpeg";
+import qrisWeCareThem from "../../assets/image/donation/qris.jpeg";
+import qrisAkuPintar from "../../assets/image/donation/qris_aku_pintar.jpeg";
 import { addDonationWithQRIS } from "../../features/donation/hooks";
 
 const QRISDisplay = ({ campaignTitle }) => {
@@ -21,15 +22,21 @@ const QRISDisplay = ({ campaignTitle }) => {
     if (titleLower.includes("close the gap") || titleLower.includes("ctg")) {
       return qrisCloseTheGap;
     }
-    
-    else {
-      return qrisCloseTheGap;
+
+    if (titleLower.includes("aku pintar")) {
+      return qrisAkuPintar;
     }
+    
+    return qrisCloseTheGap;
   };
 
   const qrisImage = getQRISImage();
-  const campaignName = campaignTitle?.toLowerCase().includes("we care them") 
+  
+  const titleLower = campaignTitle?.toLowerCase() || "";
+  const campaignName = titleLower.includes("we care them") 
     ? "We Care Them 2025" 
+    : titleLower.includes("aku pintar")
+    ? "Aku Pintar 2025"
     : "Close The Gap 2025";
 
   return (
