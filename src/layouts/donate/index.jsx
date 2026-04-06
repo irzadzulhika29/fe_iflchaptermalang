@@ -7,9 +7,9 @@ import ProgressBar from "../../components/progressbar";
 import Image from "../../components/image";
 import { Button } from "../../components/button";
 import { headDonate } from "../../static/data";
-import ovoIcon from "../../assets/icons/ovo.svg";
-import danaIcon from "../../assets/icons/dana.svg";
-import shopeepayIcon from "../../assets/icons/shopeepay.svg";
+import ovoIcon from "../../assets/icons/Ovo.svg";
+import danaIcon from "../../assets/icons/Dana.svg";
+import shopeepayIcon from "../../assets/icons/Shopeepay.svg";
 import qrisIcon from "../../assets/icons/qris.svg";
 
 const categories = [
