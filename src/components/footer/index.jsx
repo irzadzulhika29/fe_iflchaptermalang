@@ -1,9 +1,9 @@
 import { logo_text } from "../../assets/icons";
 import Container from "../container";
 import Icon from "../icon";
-import instagramIcon from "../../assets/icons/instagram.svg";
+import instagramIcon from "../../assets/icons/Instagram.svg";
 import tiktokIcon from "../../assets/icons/tiktok2.svg";
-import linkedinIcon from "../../assets/icons/linkedin.svg";
+import linkedinIcon from "../../assets/icons/LinkedIn.svg";
 import emailIcon from "../../assets/icons/email.svg";
 import phoneIcon from "../../assets/icons/phone.svg";
 
