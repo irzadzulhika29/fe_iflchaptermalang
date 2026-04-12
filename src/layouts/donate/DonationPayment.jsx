@@ -9,6 +9,7 @@ import API from "../../libs/api";
 import qrisCloseTheGap from "../../assets/image/donation/qris.jpeg";
 import qrisWeCareThem from "../../assets/image/donation/qris.jpeg";
 import qrisAkuPintar from "../../assets/image/donation/qris_aku_pintar.jpeg";
+import qrisGrowThemGreat from "../../assets/image/donation/qr_gtg.jpeg";
 import { addDonationWithQRIS } from "../../features/donation/hooks";
 
 const QRISDisplay = ({ campaignTitle }) => {
@@ -26,17 +27,23 @@ const QRISDisplay = ({ campaignTitle }) => {
     if (titleLower.includes("aku pintar")) {
       return qrisAkuPintar;
     }
-    
+
+    if (titleLower.includes("grow them great") || titleLower.includes("gtg") || titleLower.includes("youth quake")) {
+      return qrisGrowThemGreat;
+    }
+
     return qrisCloseTheGap;
   };
 
   const qrisImage = getQRISImage();
   
   const titleLower = campaignTitle?.toLowerCase() || "";
-  const campaignName = titleLower.includes("we care them") 
-    ? "We Care Them 2025" 
+  const campaignName = titleLower.includes("we care them")
+    ? "We Care Them 2025"
     : titleLower.includes("aku pintar")
     ? "Aku Pintar 2025"
+    : titleLower.includes("grow them great") || titleLower.includes("gtg") || titleLower.includes("youth quake")
+    ? "Grow Them Great x Youth Quake 2026"
     : "Close The Gap 2025";
 
   return (
