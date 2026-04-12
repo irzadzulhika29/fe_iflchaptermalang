@@ -19,7 +19,7 @@ jobs:
 
       - name: 🔨 Build Project
         run: |
-          echo "VITE_BASE_URL=${{ secrets.VITE_BASE_API }}" >> .env
+          echo "VITE_BASE_API=${{ secrets.VITE_BASE_API }}" >> .env
           npm install
           npm run build
 
